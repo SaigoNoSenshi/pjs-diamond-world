@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // A parent may only read or write documents they own. Ownership is the `ownerId`
+    // field, checked on both the stored document and the incoming write, so a client
+    // can never create or move a document under someone else's account.
+    function signedIn() { return request.auth != null; }
+    function ownsExisting() { return signedIn() && resource.data.ownerId == request.auth.uid; }
+    function ownsIncoming() { return signedIn() && request.resource.data.ownerId == request.auth.uid; }
+
+    match /parents/{parentId} {
+      allow read, write: if signedIn() && request.auth.uid == parentId;
+    }
+    match /childProfiles/{childId} {
+      allow read, delete: if ownsExisting();
+      allow create: if ownsIncoming();
+      allow update: if ownsExisting() && ownsIncoming();
+    }
+    match /creations/{creationId} {
+      allow read, delete: if ownsExisting();
+      allow create: if ownsIncoming();
+      allow update: if ownsExisting() && ownsIncoming();
+    }
+    match /gardenStates/{childId} {
+      allow read, delete: if ownsExisting();
+      allow create: if ownsIncoming();
+      allow update: if ownsExisting() && ownsIncoming();
+    }
+    match /settings/{childId} {
+      allow read, delete: if ownsExisting();
+      allow create: if ownsIncoming();
+      allow update: if ownsExisting() && ownsIncoming();
+    }
+    // Everything else is denied.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
