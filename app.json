@@ -1,0 +1,66 @@
+{
+  "expo": {
+    "name": "PJ's Diamond World",
+    "slug": "pjs-diamond-world",
+    "version": "0.1.0",
+    "orientation": "default",
+    "icon": "./assets/images/icon.png",
+    "scheme": "pjsdiamondworld",
+    "userInterfaceStyle": "light",
+    "backgroundColor": "#FFF7E6",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pivren.pjsdiamondworld",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "package": "com.pivren.pjsdiamondworld",
+      "adaptiveIcon": {
+        "backgroundColor": "#FFF7E6",
+        "foregroundImage": "./assets/images/android-icon-foreground.png",
+        "backgroundImage": "./assets/images/android-icon-background.png",
+        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      ["expo-router", { "sitemap": false }],
+      "expo-sqlite",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#FFF7E6",
+          "image": "./assets/images/splash-icon.png",
+          "imageWidth": 200
+        }
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "PJ's Diamond World uses the camera only to take a picture of a finished craft. Pictures stay on this device.",
+          "microphonePermission": false,
+          "recordAudioAndroid": false
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "PJ's Diamond World can pick a picture of a finished craft. Pictures stay on this device.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ],
+      "expo-asset"
+    ],
+    "experiments": {
+      "typedRoutes": true,
+      "reactCompiler": true
+    }
+  }
+}
