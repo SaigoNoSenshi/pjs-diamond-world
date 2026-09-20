@@ -1,0 +1,17 @@
+run = "npm run web"
+entrypoint = "src/app/_layout.tsx"
+modules = ["nodejs-22"]
+
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+run = ["sh", "-c", "npm run web"]
+
+[[ports]]
+localPort = 8081
+externalPort = 80
+
+[env]
+EXPO_NO_TELEMETRY = "1"
+CI = "1"
