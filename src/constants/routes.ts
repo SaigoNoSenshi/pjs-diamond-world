@@ -1,0 +1,17 @@
+/** Central route table. Screens navigate through these, never through string literals. */
+export const routes = {
+  intro: '/',
+  home: '/home',
+  create: '/create',
+  draw: '/create/draw',
+  craft: (craftId: string) => `/create/craft/${craftId}` as const,
+  garden: '/garden',
+  music: '/music',
+  book: '/book',
+  creation: (creationId: string) => `/book/${creationId}` as const,
+  parentGate: '/parent',
+  parentHome: '/parent/home',
+  parentSettings: '/parent/settings',
+  parentCreations: '/parent/creations',
+  parentPrivacy: '/parent/privacy',
+} as const;
