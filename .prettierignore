@@ -1,0 +1,8 @@
+node_modules
+dist
+.expo
+coverage
+expo-env.d.ts
+assets
+dist-*
+assets-mirror
