@@ -1,0 +1,86 @@
+import type { CraftTemplate } from '@/domain/craft/schema';
+
+/**
+ * PJ's Clay Cup — the first guided craft, straight from PJ's own steps.
+ * Pure data: illustrations are image-registry keys, prompts are short and cheerful.
+ */
+export const clayCup: CraftTemplate = {
+  id: 'crf_clay_cup',
+  title: "PJ's Clay Cup",
+  noun: 'cup',
+  description: 'Roll, connect, shape and paint a little clay cup, then take a picture of it.',
+  icon: 'clay',
+  illustration: 'craft.clayCup.7',
+  difficulty: 'EASY',
+  estimatedMinutes: 15,
+  materials: ['modeling clay', 'paints', 'a paintbrush'],
+  tags: ['clay', 'sculpting', 'painting', 'pj-original'],
+  reward: { creativityPoints: 5, gardenItemId: 'flower' },
+  completionAction: 'SAVE_PHOTO',
+  steps: [
+    {
+      id: 'log',
+      order: 0,
+      kind: 'INSTRUCTION',
+      instruction: 'Make a clay log.',
+      illustration: 'craft.clayCup.1',
+      audioPrompt: "Let's make a cup! First, make a clay log.",
+      animation: 'wiggle',
+    },
+    {
+      id: 'connect',
+      order: 1,
+      kind: 'INSTRUCTION',
+      instruction: 'Connect the clay together.',
+      illustration: 'craft.clayCup.2',
+      audioPrompt: 'Now connect the clay together.',
+      animation: 'bounce',
+    },
+    {
+      id: 'shape',
+      order: 2,
+      kind: 'INSTRUCTION',
+      instruction: 'Shape the cup.',
+      illustration: 'craft.clayCup.3',
+      audioPrompt: 'Shape the cup with your hands.',
+      animation: 'grow',
+    },
+    {
+      id: 'colors',
+      order: 3,
+      kind: 'INSTRUCTION',
+      instruction: 'Add colors.',
+      illustration: 'craft.clayCup.4',
+      audioPrompt: 'Great! Add some colors.',
+      animation: 'sparkle',
+    },
+    {
+      id: 'handle',
+      order: 4,
+      kind: 'INSTRUCTION',
+      instruction: 'Make the handle.',
+      illustration: 'craft.clayCup.5',
+      audioPrompt: "Let's make the handle.",
+      animation: 'wiggle',
+    },
+    {
+      id: 'photo',
+      order: 5,
+      kind: 'PHOTO',
+      instruction: 'Take a picture.',
+      illustration: 'craft.clayCup.6',
+      audioPrompt: 'Take a picture of your cup!',
+      animation: 'bounce',
+    },
+    {
+      id: 'save',
+      order: 6,
+      kind: 'SAVE',
+      instruction: 'Save my cup.',
+      illustration: 'craft.clayCup.7',
+      audioPrompt: 'Save your cup!',
+      animation: 'sparkle',
+      sound: 'celebrate',
+    },
+  ],
+};
