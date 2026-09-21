@@ -5,6 +5,8 @@ import { palette } from '@/theme';
 export const tracingActivities: ActivityDefinition[] = [
   {
     id: 'act_trace_a',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace A',
@@ -45,6 +47,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_b',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace B',
@@ -89,6 +93,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_c',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace C',
@@ -127,6 +133,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_d',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace D',
@@ -168,6 +176,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_e',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace E',
@@ -214,6 +224,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_f',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace F',
@@ -254,6 +266,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_g',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace G',
@@ -294,6 +308,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_h',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace H',
@@ -334,6 +350,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_i',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace I',
@@ -374,6 +392,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_j',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace J',
@@ -412,6 +432,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_k',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace K',
@@ -452,6 +474,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_l',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace L',
@@ -486,6 +510,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_m',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace M',
@@ -527,6 +553,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_n',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace N',
@@ -567,6 +595,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_o',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace O',
@@ -608,6 +638,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_p',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace P',
@@ -647,6 +679,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_q',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace Q',
@@ -694,6 +728,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_r',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace R',
@@ -739,6 +775,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_s',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace S',
@@ -780,6 +818,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_t',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace T',
@@ -814,6 +854,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_u',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace U',
@@ -850,6 +892,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_v',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace V',
@@ -884,6 +928,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_w',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace W',
@@ -925,6 +971,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_x',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace X',
@@ -959,6 +1007,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_y',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace Y',
@@ -999,6 +1049,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_z',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'letters',
     title: 'Trace Z',
@@ -1039,6 +1091,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_0',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace 0',
@@ -1080,6 +1134,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_1',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace 1',
@@ -1114,6 +1170,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_2',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace 2',
@@ -1152,6 +1210,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_3',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace 3',
@@ -1193,6 +1253,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_4',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace 4',
@@ -1228,6 +1290,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_5',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace 5',
@@ -1270,6 +1334,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_6',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace 6',
@@ -1313,6 +1379,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_7',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace 7',
@@ -1347,6 +1415,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_8',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace 8',
@@ -1403,6 +1473,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_9',
+    grades: [1],
+    subject: 'english',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace 9',
@@ -1445,6 +1517,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_shape_circle',
+    grades: [1],
+    subject: 'math',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace a Circle',
@@ -1488,6 +1562,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_shape_square',
+    grades: [1],
+    subject: 'math',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace a Square',
@@ -1519,6 +1595,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_shape_triangle',
+    grades: [1],
+    subject: 'math',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace a Triangle',
@@ -1549,6 +1627,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_shape_star',
+    grades: [1],
+    subject: 'math',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace a Star',
@@ -1586,6 +1666,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_shape_heart',
+    grades: [1],
+    subject: 'math',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace a Heart',
@@ -1629,6 +1711,8 @@ export const tracingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_trace_shape_diamond',
+    grades: [1],
+    subject: 'math',
     kind: 'TRACE',
     islandId: 'numbers',
     title: 'Trace a Diamond',
