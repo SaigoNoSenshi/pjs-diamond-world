@@ -50,6 +50,14 @@ export const MIGRATIONS: readonly string[] = [
     updated_at TEXT NOT NULL
   );
   `,
+  // v2 — learning progress (Plan 3: diamonds, stickers, completions, daily quest)
+  `
+  CREATE TABLE IF NOT EXISTS learning_progress (
+    child_id TEXT PRIMARY KEY NOT NULL,
+    progress_json TEXT NOT NULL,
+    updated_at TEXT NOT NULL
+  );
+  `,
 ];
 
 export async function migrate(db: SqlExecutor): Promise<number> {
