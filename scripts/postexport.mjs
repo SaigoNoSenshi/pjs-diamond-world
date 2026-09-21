@@ -93,20 +93,45 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Everything else is content-hashed or immutable per deploy: cache first.
+  // Media elements ask for audio with a Range header; the Cache API never matches
+  // those against the stored full file, so answer them ourselves with a 206 slice —
+  // otherwise sound cues fail offline.
+  const cachedResponse = request.headers.has('range')
+    ? caches.match(request.url).then((full) => full && partial(request, full))
+    : caches.match(request);
   event.respondWith(
-    caches.match(request).then(
+    cachedResponse.then(
       (cached) =>
         cached ||
         fetch(request).then((response) => {
-          if (response.ok) {
+          if (response.status === 200) {
             const copy = response.clone();
-            caches.open(CACHE).then((cache) => cache.put(request, copy));
+            caches.open(CACHE).then((cache) => cache.put(request, copy)).catch(() => {});
           }
           return response;
         }),
     ),
   );
 });
+
+async function partial(request, full) {
+  const match = /bytes=(\\d*)-(\\d*)/.exec(request.headers.get('range') || '');
+  const buffer = await full.arrayBuffer();
+  const total = buffer.byteLength;
+  if (!match) return new Response(buffer, { status: 200, headers: full.headers });
+  const start = match[1] ? Number(match[1]) : 0;
+  let end = match[2] ? Number(match[2]) : total - 1;
+  if (start >= total) {
+    return new Response(null, { status: 416, headers: { 'Content-Range': 'bytes */' + total } });
+  }
+  end = Math.min(end, total - 1);
+  const slice = buffer.slice(start, end + 1);
+  const headers = new Headers(full.headers);
+  headers.set('Content-Range', 'bytes ' + start + '-' + end + '/' + total);
+  headers.set('Content-Length', String(slice.byteLength));
+  headers.set('Accept-Ranges', 'bytes');
+  return new Response(slice, { status: 206, statusText: 'Partial Content', headers });
+}
 `;
 await fs.writeFile(path.join(dist, 'sw.js'), sw);
 
