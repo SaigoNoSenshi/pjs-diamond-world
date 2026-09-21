@@ -46,8 +46,8 @@ export function applyCounters(state: GardenState, event: ProgressionEvent): Gard
       break;
   }
   const bonus =
-    event.type === 'CRAFT_COMPLETED'
-      ? (event.payload.points ?? POINTS.CRAFT_COMPLETED)
+    event.type === 'CRAFT_COMPLETED' || event.type === 'ACTIVITY_COMPLETED'
+      ? (event.payload.points ?? POINTS[event.type])
       : POINTS[event.type];
   const creativityPoints = state.creativityPoints + Math.max(0, bonus);
   return {
@@ -72,6 +72,8 @@ export function evaluateRequirement(
       return state.counters.drawings >= req.count;
     case 'CRAFTS_AT_LEAST':
       return state.counters.crafts >= req.count;
+    case 'ACTIVITIES_AT_LEAST':
+      return state.counters.activities >= req.count;
     case 'POINTS_AT_LEAST':
       return state.creativityPoints >= req.points;
     case 'EVENT':
