@@ -1,5 +1,7 @@
 # PJ's Diamond World
 
+**Live app (web):** https://saigonosenshi.github.io/pjs-diamond-world/ — open on the tablet, then Share → Add to Home Screen.
+
 A child-first creative world for a kindergartner: draw and paint, follow real-world crafts, photograph what you made, keep it in **My Diamond Book**, and watch **Diamond Island** grow. Guided by **Jelly**, an original yellow jellyfish.
 
 Built with Expo SDK 57, Expo Router, React Native, and TypeScript strict. Offline-first, local-only by default, no accounts, no ads, no tracking. See `docs/CHILD_SAFETY.md`.
