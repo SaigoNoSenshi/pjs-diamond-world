@@ -82,13 +82,13 @@ function collectPictureIcons(activity: ParsedActivity): string[] {
   if (data.kind === 'QUIZ') {
     for (const q of data.questions) {
       for (const c of q.choices) {
-        icons.push(c.picture.icon);
+        if (c.picture) icons.push(c.picture.icon);
       }
     }
   } else if (data.kind === 'STORY') {
     if (data.question) {
       for (const c of data.question.choices) {
-        icons.push(c.picture.icon);
+        if (c.picture) icons.push(c.picture.icon);
       }
     }
   }
