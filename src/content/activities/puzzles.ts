@@ -6,6 +6,8 @@ const P = (icon: string, color: string) => ({ icon, color });
 export const puzzleActivities: ActivityDefinition[] = [
   {
     id: 'act_puzzle_princess',
+    grades: [1, 2],
+    subject: 'art',
     kind: 'PUZZLE',
     islandId: 'art',
     title: 'Princess Puzzle',
@@ -19,6 +21,8 @@ export const puzzleActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_puzzle_jelly',
+    grades: [1, 2],
+    subject: 'art',
     kind: 'PUZZLE',
     islandId: 'art',
     title: 'Jelly Puzzle',
@@ -33,6 +37,8 @@ export const puzzleActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_pattern_next',
+    grades: [1, 2],
+    subject: 'math',
     kind: 'PUZZLE',
     islandId: 'numbers',
     title: 'What Comes Next?',
