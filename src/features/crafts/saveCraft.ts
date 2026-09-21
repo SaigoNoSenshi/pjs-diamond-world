@@ -28,7 +28,7 @@ export interface SaveCraftInput {
 
 /**
  * Complete a craft: copy the photo into app storage (if any), create the Creation,
- * publish CRAFT_COMPLETED (+ PHOTO_SAVED) + CREATION_SAVED + ACTIVITY_COMPLETED,
+ * publish CRAFT_COMPLETED (+ PHOTO_SAVED) + CREATION_SAVED,
  * and clear saved progress. Failure leaves progress intact so PJ can retry.
  */
 export async function saveCraft(
@@ -84,9 +84,8 @@ export async function saveCraft(
     await deps.eventBus.publish(
       createProgressionEvent('CREATION_SAVED', input.childId, payload, stamp()),
     );
-    await deps.eventBus.publish(
-      createProgressionEvent('ACTIVITY_COMPLETED', input.childId, payload, stamp()),
-    );
+    // ACTIVITY_COMPLETED is published by the LearningProvider when it credits the
+    // matching craft activity (diamonds + sticker), so it is not duplicated here.
 
     await deps.repositories.craftProgress.clear(input.childId, template.id);
     deps.sync?.enqueue({ kind: 'creation', id: creation.id, op: 'upsert' });

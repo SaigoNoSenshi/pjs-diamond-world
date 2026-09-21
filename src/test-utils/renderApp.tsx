@@ -1,6 +1,7 @@
 import { renderRouter } from 'expo-router/testing-library';
 import type { ComponentType, PropsWithChildren } from 'react';
 
+import { LearningProvider } from '@/features/learning/LearningProvider';
 import { AppServicesProvider } from '@/hooks/useAppServices';
 import { ParentSessionProvider } from '@/hooks/useParentSession';
 import { ProfileProvider } from '@/hooks/useProfile';
@@ -24,7 +25,9 @@ export async function renderApp(
     return (
       <AppServicesProvider services={services}>
         <ProfileProvider>
-          <ParentSessionProvider>{children}</ParentSessionProvider>
+          <ParentSessionProvider>
+            <LearningProvider>{children}</LearningProvider>
+          </ParentSessionProvider>
         </ProfileProvider>
       </AppServicesProvider>
     );

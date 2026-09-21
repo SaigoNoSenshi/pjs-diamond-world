@@ -46,6 +46,7 @@ export const unlockRequirementSchema = z.discriminatedUnion('kind', [
   z.object({ kind: z.literal('CREATIONS_AT_LEAST'), count: z.number().int().positive() }),
   z.object({ kind: z.literal('DRAWINGS_AT_LEAST'), count: z.number().int().positive() }),
   z.object({ kind: z.literal('CRAFTS_AT_LEAST'), count: z.number().int().positive() }),
+  z.object({ kind: z.literal('ACTIVITIES_AT_LEAST'), count: z.number().int().positive() }),
   z.object({ kind: z.literal('POINTS_AT_LEAST'), points: z.number().int().positive() }),
   z.object({ kind: z.literal('EVENT'), eventType: progressionEventTypeSchema }),
   z.object({ kind: z.literal('CRAFT_COMPLETED'), craftId: z.string().min(1) }),

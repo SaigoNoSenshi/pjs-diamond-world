@@ -19,9 +19,12 @@ const BUDGET = {
   // Measured after Plan 3 / A1 (2026-09-19): entry 606 KB gzip. What remains is the
   // framework floor (expo-router + react-native-web + react-dom + reanimated ≈ 70%) plus
   // zod (~90 KB gzip, candidate for a zod/mini migration). Budget = measured + ~7%.
+  // Plan 3 / B (2026-09-21): +79 activities, 52 data-driven icons, 29 story/craft
+  // illustrations (WebP ≤47 KB each, loaded only by the screen that shows them) and 12
+  // Music Maker notes. Entry stayed at 635 KB gzip; assets are per-screen lazy loads.
   entryGzipKB: 650, // main JS chunk (what must load before Diamond Island appears)
-  totalJsGzipKB: 950, // every JS chunk together, incl. the never-loaded-by-default Firebase chunk
-  assetsKB: 1000, // images + audio + icons shipped with the app (raw bytes)
+  totalJsGzipKB: 1000, // every JS chunk together, incl. the never-loaded-by-default Firebase chunk
+  assetsKB: 1600, // images + audio + icons shipped with the app (raw bytes)
   largestAssetKB: 160, // any single image/audio file
 };
 

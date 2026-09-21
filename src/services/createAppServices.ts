@@ -2,9 +2,11 @@ import { Platform } from 'react-native';
 
 import { createDeviceRepositories } from '@/repositories';
 
+import { noteSounds } from '@/content/music/notes';
 import { musicTracks, soundEffects } from '@/content/music/tracks';
 
 import { ExpoMusicService } from './audio/ExpoMusicService';
+import { ExpoNotePlayer } from './audio/ExpoNotePlayer';
 import { ExpoSoundEffectService } from './audio/ExpoSoundEffectService';
 import { ExpoSpeechPromptService } from './audio/ExpoSpeechPromptService';
 import { installUserGestureTracking } from './audio/userGesture';
@@ -56,6 +58,7 @@ export function createAppServices(): Promise<AppServices> {
         camera: new ExpoCameraService(logger),
         music: new ExpoMusicService(musicTracks, logger),
         sfx: new ExpoSoundEffectService(soundEffects, logger),
+        notes: new ExpoNotePlayer(noteSounds, logger),
         voice: new ExpoSpeechPromptService(logger),
       });
     })();

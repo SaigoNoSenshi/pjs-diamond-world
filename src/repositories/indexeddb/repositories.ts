@@ -7,6 +7,7 @@ import {
   type NewCreation,
 } from '@/domain/creation/schema';
 import { drawingDraftSchema, type DrawingDraft } from '@/domain/drawing/schema';
+import { learningProgressSchema, type LearningProgress } from '@/domain/learning/schema';
 import {
   gardenStateSchema,
   progressionEventSchema,
@@ -22,11 +23,25 @@ import type {
   CreationRepository,
   DraftRepository,
   GardenRepository,
+  LearningProgressRepository,
   Repositories,
   SettingsRepository,
   StoredAsset,
 } from '../interfaces';
 import type { KeyValueStore } from './database';
+
+export class KvLearningRepository implements LearningProgressRepository {
+  constructor(private readonly kv: KeyValueStore) {}
+
+  async get(childId: string): Promise<LearningProgress | null> {
+    const parsed = learningProgressSchema.safeParse(await this.kv.get('learningProgress', childId));
+    return parsed.success ? parsed.data : null;
+  }
+
+  async save(progress: LearningProgress): Promise<void> {
+    await this.kv.put('learningProgress', progress.childId, learningProgressSchema.parse(progress));
+  }
+}
 
 /**
  * Web repositories over a KeyValueStore (IndexedDB in browsers; memory when denied).
@@ -252,6 +267,7 @@ export function createKvRepositories(
     garden: new KvGardenRepository(kv),
     craftProgress: new KvCraftProgressRepository(kv),
     drafts: new KvDraftRepository(kv),
+    learning: new KvLearningRepository(kv),
     settings,
     assets: new DataUriAssetStore(kv),
   };
