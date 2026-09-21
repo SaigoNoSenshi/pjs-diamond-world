@@ -15,7 +15,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Sparkle } from '@/components/animations/Sparkle';
 import { IconButton } from '@/components/IconButton';
 import { Icon, type IconName } from '@/components/icons/Icon';
-import { activitiesForIsland } from '@/content/activities';
 import { islands, type IslandDefinition } from '@/content/islands';
 import { images } from '@/constants/images';
 import { routes } from '@/constants/routes';
@@ -23,6 +22,7 @@ import { strings } from '@/constants/strings';
 import { questComplete } from '@/domain/learning/dailyQuest';
 import { DiamondCounter } from '@/features/learning/components/DiamondCounter';
 import { useLearning } from '@/features/learning/LearningProvider';
+import { useActivities } from '@/hooks/useActivities';
 import { useAppServices } from '@/hooks/useAppServices';
 import { useSfx } from '@/hooks/useSfx';
 import { useVoice } from '@/hooks/useVoice';
@@ -44,7 +44,8 @@ export function HomeScreen() {
   const { speak } = useVoice();
   const { play } = useSfx();
   const { analytics } = useAppServices();
-  const { progress, isCompleted } = useLearning();
+  const { progress, isCompleted, grade } = useLearning();
+  const all = useActivities();
   const [stage, setStage] = useState({ width: 0, height: 0 });
 
   const phase = useMemo(() => dayPhaseFor(new Date()), []);
@@ -97,14 +98,19 @@ export function HomeScreen() {
         <Text style={styles.title} accessibilityRole="header">
           {strings.app.worldName}
         </Text>
-        <Pressable
-          accessibilityRole="button"
-          accessibilityLabel={strings.learning.stickers}
-          onPress={() => go(routes.stickers)}
-          testID="home-stickers"
-        >
-          <DiamondCounter count={progress.diamonds} />
-        </Pressable>
+        <View style={styles.topRight}>
+          <View style={styles.gradeBadge} accessibilityRole="text" testID="grade-badge">
+            <Text style={styles.gradeText}>{strings.learning.grade(grade)}</Text>
+          </View>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel={strings.learning.stickers}
+            onPress={() => go(routes.stickers)}
+            testID="home-stickers"
+          >
+            <DiamondCounter count={progress.diamonds} />
+          </Pressable>
+        </View>
       </View>
 
       <ScrollView
@@ -113,7 +119,7 @@ export function HomeScreen() {
       >
         <View style={[styles.islands, { gap }]}>
           {islands.map((island) => {
-            const list = activitiesForIsland(island.id);
+            const list = all.filter((a) => a.islandId === island.id && a.grades.includes(grade));
             const done = list.filter((a) => isCompleted(a.id)).length;
             return (
               <IslandTile
@@ -283,6 +289,20 @@ const styles = StyleSheet.create({
     textShadowColor: 'rgba(0,0,0,0.25)',
     textShadowRadius: 6,
     textShadowOffset: { width: 0, height: 2 },
+  },
+  topRight: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  gradeBadge: {
+    backgroundColor: palette.ink,
+    borderRadius: radii.pill,
+    paddingHorizontal: spacing.md,
+    minHeight: 40,
+    justifyContent: 'center',
+  },
+  gradeText: {
+    fontFamily: typography.family,
+    fontSize: typography.size.body,
+    fontWeight: typography.weight.black,
+    color: palette.white,
   },
   content: { paddingHorizontal: spacing.lg, gap: spacing.lg, alignItems: 'center' },
   islands: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' },
