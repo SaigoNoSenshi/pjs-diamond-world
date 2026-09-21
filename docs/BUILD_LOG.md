@@ -452,3 +452,36 @@ Tablet 1180×820, phone 390×844 and desktop 1440×900 all within the ranges abo
 **Gate:** prettier ✓, lint 0/0, tsc strict ✓, jest 30 suites / 84 tests ✓, export 17 chunks / 16 routes ✓, budget ✓.
 
 **Lazy-route smoke (`perf-lab/smoke.mjs`, tablet, 4× CPU):** `/home`, `/create`, `/create/draw`, `/create/craft/crf_clay_cup`, `/garden`, `/music`, `/book`, `/parent`, unknown URL → intro — all render their screen with the loader gone, 0 console/page errors, 0.3–1.2 s each cold.
+
+### Phase 16 — Live deployment to GitHub Pages (2026-09-20 → 2026-09-21)
+
+**Live URL: https://saigonosenshi.github.io/pjs-diamond-world/** (repository `SaigoNoSenshi/pjs-diamond-world`, public, branch `main`, deployed by `.github/workflows/web.yml` on every push).
+
+**How the code got there (and why it is shaped this way).** The GitHub connection available here can write files but cannot create repositories, cannot push git trees, cannot write binaries and cannot write under `.github/workflows/`. Consequences, all now permanent parts of the repo:
+
+- Binary assets have base64 text twins in `assets-mirror/` (`scripts/assets-mirror.mjs encode|decode|check`). `npm install` runs `decode` (postinstall), `npm run validate` and CI run `check`. A fresh clone with zero binaries rebuilt all 34 files sha1-identical.
+- The 240 text files were uploaded one commit each on four branches (`import-1..4`) and merged through PRs #1–#4; every blob SHA on `main` was verified against the local repository before merging. `.nojekyll` was added so Pages serves `_expo/` as-is.
+- JP committed the workflow file himself through a pre-filled GitHub "new file" link, and enabled Pages (Settings → Pages → Source: GitHub Actions) after the first run failed at `configure-pages` (a token cannot enable Pages on a new repo). The workflow uses `actions/configure-pages` to compute the base path (`/pjs-diamond-world`) which `app.config.js`, `+html.tsx`, the manifest and the service worker all consume.
+
+**Verification on the live site (Playwright, headless Chromium, 4× CPU slowdown, real network from this sandbox):**
+
+| Check                                                                                                                                                              | Result                                                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- |
+| Fresh-clone CI dry run (`npm ci` → mirror check → lint → tsc → jest → export → budget)                                                                             | green locally and in GitHub Actions (run 2)                                                                             |
+| 9 routes incl. lazy chunks and unknown URL → intro                                                                                                                 | 9/9 render, loader gone, 0 app errors                                                                                   |
+| End-to-end: intro → home → Draw → touch stroke → Save → celebration → Book card → **hard reload keeps the drawing** → intro shows Skip → Garden grew → parent gate | all steps pass, 0 errors                                                                                                |
+| Performance (tablet 1180×820 / phone 390×844 / desktop 1440×900)                                                                                                   | intro visible 1.7–2.7 s cold (701 KB), 60 fps / 0 long frames idle and drawing, Draw chunk 0.6 s, warm reload 0.5–0.7 s |
+| Offline (visit once, cut network, reload `/home`, navigate)                                                                                                        | boots in 0.24 s, every resource served by the worker                                                                    |
+| PWA files (`manifest.json` scoped to `/pjs-diamond-world/`, `sw.js`, icons)                                                                                        | 200, correct base path                                                                                                  |
+
+**Bugs found on the live site and fixed (pushed as three file commits, redeployed):**
+
+| #   | Found                                                                                                                                                                                             | Fix                                                                                                                    |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| 10  | Offline: tapping a button threw `NotSupportedError` — the sound file request carries `Range: bytes=0-` and the Cache API never matches range requests, so it fell through to the (absent) network | `sw.js` answers range requests from the cached full file with a proper `206` slice; only `200` responses are cached    |
+| 11  | Same error surfaced as an unhandled rejection                                                                                                                                                     | `userGesture.ts` rejection guard also swallows `NotSupportedError` (sound is decoration, never an error for the child) |
+| 12  | Home tile label read "My Diamond .." — react-native-web ignores `adjustsFontSizeToFit`                                                                                                            | Hero labels: 24 px and up to three lines; verified "My Diamond Book" renders fully at the tablet viewport              |
+
+**Expected and harmless:** GitHub Pages answers dynamic or unknown URLs (`/create/craft/…`, `/book/…`, typos) with HTTP 404 _and_ our `404.html`, which is the app shell — the app boots and routes correctly; the browser logs one "404" console line for the document. In-app navigation never reloads, so a child never hits it.
+
+**Not verified here, still true:** real iPad/Android tablet feel (use `?fps=1` on the device), iOS Safari specifics beyond the earlier WebKit-condition simulation, native builds.
