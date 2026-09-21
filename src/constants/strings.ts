@@ -108,6 +108,11 @@ export const strings = {
     nextPage: 'Next page',
     theEnd: 'The end!',
     readToMe: 'Read to me',
+    grade: (n: number) => `Grade ${n}`,
+    gradeShort: (n: number) => `G${n}`,
+    levelUp: (n: number) => `You are ready for Grade ${n}!`,
+    newContent: 'New adventures arrived!',
+    typeAnswer: 'Type the answer',
   },
   common: {
     home: 'Home',
@@ -153,4 +158,6 @@ export const voicePrompts = {
   correct: ['Yes!', 'That’s right!', 'Wonderful!', 'You got it!'],
   tryAgain: ['Almost! Try again.', 'Not that one. Try another!', 'Keep going, you can do it!'],
   complete: (nickname: string) => `You did it, ${nickname}!`,
+  levelUp: (nickname: string, n: number) => `Amazing, ${nickname}! You are ready for Grade ${n}!`,
+  newContent: 'New adventures arrived on Diamond Island!',
 } as const;
