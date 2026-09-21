@@ -2,12 +2,16 @@ import Svg, { Circle, Ellipse, G, Line, Path, Polygon, Rect } from 'react-native
 
 import { palette } from '@/theme';
 
+import { extraIconSpecs } from './extraIcons';
+import type { ColorToken, ExtraIconName, IconElement } from './iconSpec';
+
 /**
  * Original, hand-authored icon set drawn on a 100×100 grid. Thick friendly strokes,
  * rounded shapes. Icons double as stamps (see `stampIds`). Colour is a prop so the
  * chosen drawing colour tints stamps.
  */
 export type IconName =
+  | ExtraIconName
   | 'paintbrush'
   | 'rainbow'
   | 'flower'
@@ -80,7 +84,72 @@ export function Icon({
   );
 }
 
+function resolveColor(
+  token: ColorToken | undefined,
+  c: string,
+  a: string,
+  s: string,
+  fallback: string,
+) {
+  switch (token) {
+    case undefined:
+      return fallback;
+    case 'c':
+      return c;
+    case 'a':
+      return a;
+    case 's':
+      return s;
+    case 'white':
+      return palette.white;
+    default:
+      return token;
+  }
+}
+
+/** Renders a data-driven icon spec (see iconSpec.ts). */
+function renderSpec(name: ExtraIconName, c: string, a: string, s: string) {
+  const spec = extraIconSpecs[name];
+  return (
+    <G strokeLinejoin="round" strokeLinecap="round">
+      {spec.elements.map((el: IconElement, i) => {
+        const fill = resolveColor(el.fill, c, a, s, 'none');
+        const stroke = resolveColor(el.stroke, c, a, s, s);
+        const strokeWidth = el.strokeWidth ?? SW;
+        const styled = { fill, stroke, strokeWidth, opacity: el.opacity ?? 1 };
+        switch (el.kind) {
+          case 'path':
+            return <Path key={i} d={el.d} {...styled} />;
+          case 'circle':
+            return <Circle key={i} cx={el.cx} cy={el.cy} r={el.r} {...styled} />;
+          case 'ellipse':
+            return <Ellipse key={i} cx={el.cx} cy={el.cy} rx={el.rx} ry={el.ry} {...styled} />;
+          case 'rect':
+            return (
+              <Rect
+                key={i}
+                x={el.x}
+                y={el.y}
+                width={el.width}
+                height={el.height}
+                rx={el.rx ?? 0}
+                {...styled}
+              />
+            );
+          case 'polygon':
+            return <Polygon key={i} points={el.points} {...styled} />;
+          case 'line':
+            return <Line key={i} x1={el.x1} y1={el.y1} x2={el.x2} y2={el.y2} {...styled} />;
+          default:
+            return null;
+        }
+      })}
+    </G>
+  );
+}
+
 function renderIcon(name: IconName, c: string, a: string, s: string) {
+  if (name in extraIconSpecs) return renderSpec(name as ExtraIconName, c, a, s);
   const common = {
     stroke: s,
     strokeWidth: SW,
@@ -403,5 +472,8 @@ function renderIcon(name: IconName, c: string, a: string, s: string) {
           <Path d="M16 56 L16 84 L84 84 L84 56" fill="none" strokeWidth={9} />
         </G>
       );
+    default:
+      // Data-driven names are handled above; anything unknown degrades to a star.
+      return renderIcon('star', c, a, s);
   }
 }
