@@ -67,7 +67,8 @@ None. No public profiles, no public posting, no messaging, no friends list, no c
 
 - All characters, artwork, and music are original. No licensed or trademarked properties.
 - Language in the child experience is short, positive, and never shaming. Failure states say things like "Oops! Let's try again."
-- No time pressure, timers, or streak mechanics. Progression is additive and can never be lost.
+- No time pressure, timers, or streak mechanics. Progression is additive and can never be lost. Grade levels only ever go up (mastery or a parent), never down.
+- **Content updates** (`RemoteContentService`): the app may download new activity packs from **its own site only** (`/content/packs.json` on the same origin that serves the app; on native only from a URL the builder sets at build time). Download only — nothing about the child or the device is sent, no identifiers, no cookies, no third-party hosts. Packs are validated with the same schema as built-in content and invalid entries are dropped; a pack cannot add links, media URLs, or code — only the same data the built-in activities use. Parents can trigger a check from Grown-ups → Learning; the child sees at most a "new things to try" note.
 
 ## 10. Accessibility and wellbeing
 
