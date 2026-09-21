@@ -4,6 +4,8 @@ Three ways, from fastest to most "real app". All of them use the same code.
 
 ## 1. Web app (fastest — works today on iPad, Android tablets, phones, desktops)
 
+**PJ's live app: https://saigonosenshi.github.io/pjs-diamond-world/** — deployed automatically from `main` by GitHub Actions. On the tablet: open it in Safari/Chrome → Share (or ⋮ menu) → **Add to Home Screen**.
+
 The web build is a full version of the app that runs in Safari/Chrome and can be added to the home screen like an app. Creations are stored in the browser (IndexedDB) on the device. After the first visit a service worker keeps every file on the device, so the app opens instantly and **works offline** (car, plane, no Wi-Fi).
 
 **Build**
