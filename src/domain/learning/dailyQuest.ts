@@ -30,9 +30,14 @@ export function pickDailyQuest(
   activities: readonly ActivityDefinition[],
   dateKey: string,
   childId: string,
+  grade?: number,
 ): string[] {
-  const rand = seededRandom(`${dateKey}|${childId}`);
-  const pool = activities.filter((a) => a.kind !== 'CRAFT'); // crafts need materials; never required
+  const rand = seededRandom(`${dateKey}|${childId}|g${grade ?? 0}`);
+  const noCrafts = activities.filter((a) => a.kind !== 'CRAFT'); // crafts need materials; never required
+  // Grade-appropriate pool, falling back to everything when a grade has too little content.
+  const forGrade =
+    grade === undefined ? noCrafts : noCrafts.filter((a) => a.grades.includes(grade));
+  const pool = forGrade.length >= QUEST_SIZE ? forGrade : noCrafts;
   const shuffled = [...pool].sort(() => rand() - 0.5);
   const chosen: ActivityDefinition[] = [];
   const islands = new Set<string>();
@@ -61,11 +66,12 @@ export function ensureQuest(
   progress: LearningProgress,
   activities: readonly ActivityDefinition[],
   dateKey: string,
+  grade?: number,
 ): LearningProgress {
   if (progress.quest && progress.quest.dateKey === dateKey) return progress;
   const quest: DailyQuestState = {
     dateKey,
-    activityIds: pickDailyQuest(activities, dateKey, progress.childId),
+    activityIds: pickDailyQuest(activities, dateKey, progress.childId, grade),
     completedIds: [],
     chestOpened: false,
   };
