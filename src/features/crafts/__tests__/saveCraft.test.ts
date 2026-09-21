@@ -42,12 +42,7 @@ describe('saveCraft', () => {
     expect(result.value.type).toBe('CRAFT');
     expect(result.value.metadata.craftId).toBe(clayCup.id);
     expect(await repositories.assets.exists(result.value.assetUri)).toBe(true);
-    expect(events.map((e) => e.type)).toEqual([
-      'CRAFT_COMPLETED',
-      'PHOTO_SAVED',
-      'CREATION_SAVED',
-      'ACTIVITY_COMPLETED',
-    ]);
+    expect(events.map((e) => e.type)).toEqual(['CRAFT_COMPLETED', 'PHOTO_SAVED', 'CREATION_SAVED']);
     expect(events[0]?.payload.points).toBe(clayCup.reward.creativityPoints);
     expect(await repositories.craftProgress.get('chd_default', clayCup.id)).toBeNull();
   });
@@ -68,6 +63,6 @@ describe('saveCraft', () => {
     if (!result.ok) return;
     expect(isBundledAssetUri(result.value.assetUri)).toBe(true);
     expect(bundledAssetKey(result.value.assetUri)).toBe('craft.clayCup.7');
-    expect(types).toEqual(['CRAFT_COMPLETED', 'CREATION_SAVED', 'ACTIVITY_COMPLETED']);
+    expect(types).toEqual(['CRAFT_COMPLETED', 'CREATION_SAVED']);
   });
 });

@@ -11,6 +11,7 @@ import {
   NoopSyncService,
   SilentAudioPromptService,
   SilentMusicService,
+  SilentNoteService,
   SilentSoundEffectService,
 } from './defaults';
 import type {
@@ -20,6 +21,7 @@ import type {
   CreativeAssistantService,
   EventBus,
   MusicService,
+  NoteService,
   SoundEffectService,
   SyncService,
 } from './interfaces';
@@ -37,6 +39,7 @@ export interface AppServices {
   voice: AudioPromptService;
   music: MusicService;
   sfx: SoundEffectService;
+  notes: NoteService;
   camera: CameraService;
   sync: SyncService;
   analytics: AnalyticsService;
@@ -64,6 +67,7 @@ export function createTestServices(overrides: Partial<AppServices> = {}): AppSer
     voice: overrides.voice ?? new SilentAudioPromptService(),
     music: overrides.music ?? new SilentMusicService(musicTracks),
     sfx: overrides.sfx ?? new SilentSoundEffectService(),
+    notes: overrides.notes ?? new SilentNoteService(),
     camera: overrides.camera ?? new NoCameraService(),
     sync,
     analytics: overrides.analytics ?? new LocalAnalyticsService(logger),

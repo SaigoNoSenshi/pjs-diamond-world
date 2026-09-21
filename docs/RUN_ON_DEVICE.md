@@ -64,6 +64,7 @@ Walk this path with PJ watching, not helping:
 4. My Garden shows the sprout and flower; Music Reef plays/pauses/skips; volume never jumps.
 5. Grown-ups → hold 2 s → answer the sum → Parent Mode → back to island.
 6. Kill the app, reopen: creations, garden and settings are still there.
-7. (Web) Turn Wi-Fi off, reopen from the home screen: the island still loads.
+7. Tap a fish or crab on the island — it should bounce and say its name. Open **Letter Lagoon** → **Trace A**: trace with a finger; the dotted line turns green and Jelly says "A is for apple!". Open the **Daily Quest** and finish the three activities → the chest opens.
+8. (Web) Turn Wi-Fi off, reopen from the home screen: the island still loads.
 
 Anything PJ cannot figure out without an adult explaining is a bug — note it in `docs/BUILD_LOG.md`.

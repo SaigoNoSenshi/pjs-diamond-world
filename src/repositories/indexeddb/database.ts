@@ -3,7 +3,8 @@
  * store per table, string keys. Kept dependency-free; ~100 lines is all we need.
  */
 export const IDB_NAME = 'pjs-diamond-world';
-export const IDB_VERSION = 1;
+// v2: learningProgress (Plan 3). Bumping the version adds missing stores in onupgradeneeded.
+export const IDB_VERSION = 2;
 export const STORES = [
   'creations',
   'gardenStates',
@@ -11,6 +12,7 @@ export const STORES = [
   'craftProgress',
   'drafts',
   'assets',
+  'learningProgress',
 ] as const;
 export type StoreName = (typeof STORES)[number];
 
