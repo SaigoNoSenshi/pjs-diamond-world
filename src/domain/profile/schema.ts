@@ -13,6 +13,10 @@ export const appSettingsSchema = z.object({
   /** Salted hash of an optional parent PIN. Never the PIN itself. */
   parentPinHash: z.string().optional(),
   musicVolume: z.number().min(0).max(1),
+  /** Child's grade level (Philippines K-12 Grades 1–6). Set by a parent; may auto-advance. */
+  grade: z.number().int().min(1).max(6).default(1),
+  /** Move up a grade automatically once the current one is mastered. Never moves down. */
+  autoAdvanceGrade: z.boolean().default(true),
 });
 export type AppSettings = z.infer<typeof appSettingsSchema>;
 
@@ -23,6 +27,8 @@ export const defaultAppSettings: AppSettings = {
   cloudSyncEnabled: false,
   introSeen: false,
   musicVolume: 0.6,
+  grade: 1,
+  autoAdvanceGrade: true,
 };
 
 export const avatarIdSchema = z.enum(['jellyfish', 'diamond', 'star', 'flower', 'crown']);
