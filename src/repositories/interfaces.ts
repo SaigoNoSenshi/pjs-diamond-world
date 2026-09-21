@@ -1,6 +1,7 @@
 import type { Creation, CreationFilter, NewCreation } from '@/domain/creation/schema';
 import type { CraftProgress } from '@/domain/craft/schema';
 import type { DrawingDraft } from '@/domain/drawing/schema';
+import type { LearningProgress } from '@/domain/learning/schema';
 import type { AppSettings, ChildProfile } from '@/domain/profile/schema';
 import type { GardenState, ProgressionEvent } from '@/domain/progression/schema';
 
@@ -40,6 +41,12 @@ export interface DraftRepository {
   clear(childId: string): Promise<void>;
 }
 
+/** Diamonds, stickers, completions and today's quest — one record per child. */
+export interface LearningProgressRepository {
+  get(childId: string): Promise<LearningProgress | null>;
+  save(progress: LearningProgress): Promise<void>;
+}
+
 export interface SettingsRepository {
   getProfile(): Promise<ChildProfile>;
   saveProfile(profile: ChildProfile): Promise<void>;
@@ -77,6 +84,7 @@ export interface Repositories {
   garden: GardenRepository;
   craftProgress: CraftProgressRepository;
   drafts: DraftRepository;
+  learning: LearningProgressRepository;
   settings: SettingsRepository;
   assets: AssetStore;
 }
