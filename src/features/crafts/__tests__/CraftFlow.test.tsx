@@ -72,12 +72,14 @@ describe("PJ's Clay Cup flow", () => {
     expect(creations[0]?.type).toBe('CRAFT');
     // The garden reacts too (flower for the craft, sprout for the first creation).
     expect(events.filter((e) => e.type === 'GARDEN_ITEM_UNLOCKED')).toHaveLength(2);
-    expect(events.map((e) => e.type).filter((t) => t !== 'GARDEN_ITEM_UNLOCKED')).toEqual([
-      'CRAFT_COMPLETED',
-      'PHOTO_SAVED',
-      'CREATION_SAVED',
-      'ACTIVITY_COMPLETED',
-    ]);
+    // CRAFT_COMPLETED also completes the matching learning activity (async), so the
+    // ACTIVITY_COMPLETED position varies; compare as a multiset.
+    expect(
+      events
+        .map((e) => e.type)
+        .filter((t) => t !== 'GARDEN_ITEM_UNLOCKED')
+        .sort(),
+    ).toEqual(['ACTIVITY_COMPLETED', 'CRAFT_COMPLETED', 'CREATION_SAVED', 'PHOTO_SAVED']);
     expect(await services.repositories.craftProgress.get('chd_default', 'crf_clay_cup')).toBeNull();
 
     await fireEvent.press(q.getByTestId('craft-go-book'));

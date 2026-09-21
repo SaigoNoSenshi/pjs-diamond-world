@@ -6,6 +6,7 @@ import {
 } from '@/domain/creation/schema';
 import type { CraftProgress } from '@/domain/craft/schema';
 import type { DrawingDraft } from '@/domain/drawing/schema';
+import type { LearningProgress } from '@/domain/learning/schema';
 import { createDefaultProfile, type AppSettings, type ChildProfile } from '@/domain/profile/schema';
 import type { GardenState, ProgressionEvent } from '@/domain/progression/schema';
 import { createId } from '@/utils/ids';
@@ -17,6 +18,7 @@ import type {
   CreationRepository,
   DraftRepository,
   GardenRepository,
+  LearningProgressRepository,
   Repositories,
   SettingsRepository,
   StoredAsset,
@@ -135,6 +137,18 @@ export class MemoryDraftRepository implements DraftRepository {
   }
 }
 
+export class MemoryLearningRepository implements LearningProgressRepository {
+  private readonly items = new Map<string, LearningProgress>();
+
+  async get(childId: string): Promise<LearningProgress | null> {
+    return this.items.get(childId) ?? null;
+  }
+
+  async save(progress: LearningProgress): Promise<void> {
+    this.items.set(progress.childId, progress);
+  }
+}
+
 export class MemorySettingsRepository implements SettingsRepository {
   private profile: ChildProfile;
 
@@ -194,6 +208,7 @@ export function createMemoryRepositories(clock: Clock = systemClock): Repositori
     garden: new MemoryGardenRepository(),
     craftProgress: new MemoryCraftProgressRepository(),
     drafts: new MemoryDraftRepository(),
+    learning: new MemoryLearningRepository(),
     settings: new MemorySettingsRepository(clock),
     assets: new MemoryAssetStore(),
   };

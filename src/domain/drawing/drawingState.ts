@@ -26,6 +26,15 @@ export type DrawingAction =
     }
   | { type: 'EXTEND_STROKE'; point: Point }
   | { type: 'END_STROKE' }
+  /** Whole stroke at once — the fast canvases collect points off-React and commit once. */
+  | {
+      type: 'COMMIT_STROKE';
+      id: string;
+      kind: BrushKind;
+      color: string;
+      width: number;
+      points: readonly Point[];
+    }
   | { type: 'ADD_STAMP'; stamp: StampPlacement }
   | { type: 'UNDO' }
   | { type: 'REDO' }
@@ -85,6 +94,19 @@ export function drawingReducer(state: DrawingState, action: DrawingAction): Draw
       const committed = pushHistory(state, [...state.elements, { type: 'stroke', stroke }]);
       return { ...committed, activeStroke: null };
     }
+    case 'COMMIT_STROKE': {
+      const points = thinPoints(action.points);
+      if (points.length === 0) return state;
+      const stroke: Stroke = {
+        id: action.id,
+        kind: action.kind,
+        color: action.kind === 'eraser' ? state.backgroundColor : action.color,
+        width: action.width,
+        points,
+      };
+      const committed = pushHistory(state, [...state.elements, { type: 'stroke', stroke }]);
+      return { ...committed, activeStroke: null };
+    }
     case 'ADD_STAMP':
       return pushHistory(state, [...state.elements, { type: 'stamp', stamp: action.stamp }]);
     case 'UNDO': {
@@ -113,6 +135,16 @@ export function drawingReducer(state: DrawingState, action: DrawingAction): Draw
       if (state.elements.length === 0 && !state.activeStroke) return state;
       return { ...pushHistory(state, []), activeStroke: null };
   }
+}
+
+/** Drops samples closer than MIN_POINT_DISTANCE to their predecessor (keeps the first). */
+export function thinPoints(points: readonly Point[]): Point[] {
+  const out: Point[] = [];
+  for (const p of points) {
+    const last = out[out.length - 1];
+    if (!last || Math.hypot(last.x - p.x, last.y - p.y) >= MIN_POINT_DISTANCE) out.push(p);
+  }
+  return out;
 }
 
 export const canUndo = (s: DrawingState): boolean => s.past.length > 0;

@@ -13,6 +13,7 @@ import {
 import { createKvRepositories } from './indexeddb/repositories';
 import { createMemoryRepositories } from './memory';
 import { openExpoDatabase } from './sqlite/expoDatabase';
+import { SqliteLearningRepository } from './sqlite/learning';
 import {
   SqliteCraftProgressRepository,
   SqliteCreationRepository,
@@ -49,6 +50,7 @@ export async function createDeviceRepositories(logger: Logger): Promise<Reposito
       garden: new SqliteGardenRepository(db),
       craftProgress: new SqliteCraftProgressRepository(db),
       drafts: new SqliteDraftRepository(db),
+      learning: new SqliteLearningRepository(db),
       settings,
       assets: new FileSystemAssetStore(),
     };

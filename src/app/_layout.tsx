@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { FpsMeter, isFpsMeterEnabled } from '@/components/dev/FpsMeter';
+import { LearningProvider } from '@/features/learning/LearningProvider';
 import { AppServicesProvider } from '@/hooks/useAppServices';
 import { useMusicController } from '@/hooks/useMusic';
 import { ParentSessionProvider } from '@/hooks/useParentSession';
@@ -38,16 +39,18 @@ export default function RootLayout() {
       <AppServicesProvider services={services}>
         <ProfileProvider>
           <ParentSessionProvider>
-            <MusicController />
-            <StatusBar style="dark" />
-            <Stack
-              screenOptions={{
-                headerShown: false,
-                contentStyle: { backgroundColor: colors.background },
-                animation: 'fade',
-              }}
-            />
-            {isFpsMeterEnabled() ? <FpsMeter /> : null}
+            <LearningProvider>
+              <MusicController />
+              <StatusBar style="dark" />
+              <Stack
+                screenOptions={{
+                  headerShown: false,
+                  contentStyle: { backgroundColor: colors.background },
+                  animation: 'fade',
+                }}
+              />
+              {isFpsMeterEnabled() ? <FpsMeter /> : null}
+            </LearningProvider>
           </ParentSessionProvider>
         </ProfileProvider>
       </AppServicesProvider>
