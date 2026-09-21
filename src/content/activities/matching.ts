@@ -1,0 +1,78 @@
+import type { ActivityDefinition } from '@/domain/activity/schema';
+import { palette } from '@/theme';
+
+/** Memory-card matching: flip two cards, find the pairs. Calm, no timer. */
+export const matchingActivities: ActivityDefinition[] = [
+  {
+    id: 'act_match_sea',
+    kind: 'MATCHING',
+    islandId: 'science',
+    title: 'Sea Friends Memory',
+    icon: 'octopus',
+    color: palette.aqua,
+    voiceIntro: 'Flip two cards. Can you find the two that match?',
+    instruction: 'Find the matching pairs.',
+    reward: { diamonds: 4, stickerId: 'stk_octopus' },
+    tags: ['memory', 'animals'],
+    data: {
+      kind: 'MATCHING',
+      backColor: palette.sea,
+      pairs: [
+        { id: 'fish', label: 'Fish', picture: { icon: 'fish', color: palette.tangerine } },
+        { id: 'crab', label: 'Crab', picture: { icon: 'crab', color: palette.coral } },
+        { id: 'turtle', label: 'Turtle', picture: { icon: 'turtle', color: palette.leaf } },
+        { id: 'octopus', label: 'Octopus', picture: { icon: 'octopus', color: palette.lavender } },
+        { id: 'whale', label: 'Whale', picture: { icon: 'whale', color: palette.sea } },
+        { id: 'seahorse', label: 'Seahorse', picture: { icon: 'seahorse', color: palette.aqua } },
+      ],
+    },
+  },
+  {
+    id: 'act_match_shapes',
+    kind: 'MATCHING',
+    islandId: 'numbers',
+    title: 'Shape Memory',
+    icon: 'square',
+    color: palette.lavender,
+    voiceIntro: 'Find two shapes that are the same!',
+    instruction: 'Find the matching shapes.',
+    reward: { diamonds: 4 },
+    tags: ['memory', 'shapes'],
+    data: {
+      kind: 'MATCHING',
+      backColor: palette.lavender,
+      pairs: [
+        { id: 'circle', label: 'Circle', picture: { icon: 'circle', color: palette.coral } },
+        { id: 'square', label: 'Square', picture: { icon: 'square', color: palette.sea } },
+        { id: 'triangle', label: 'Triangle', picture: { icon: 'triangle', color: palette.leaf } },
+        { id: 'star', label: 'Star', picture: { icon: 'star', color: palette.sunshine } },
+        { id: 'heart', label: 'Heart', picture: { icon: 'heart', color: palette.blossom } },
+        { id: 'diamond', label: 'Diamond', picture: { icon: 'diamond', color: palette.aqua } },
+      ],
+    },
+  },
+  {
+    id: 'act_match_colors',
+    kind: 'MATCHING',
+    islandId: 'art',
+    title: 'Color Memory',
+    icon: 'rainbow',
+    color: palette.coral,
+    voiceIntro: 'Find two splashes with the same color!',
+    instruction: 'Find the matching colors.',
+    reward: { diamonds: 3, stickerId: 'stk_rainbow' },
+    tags: ['memory', 'colors'],
+    data: {
+      kind: 'MATCHING',
+      backColor: palette.ink,
+      pairs: [
+        { id: 'red', label: 'Red', picture: { icon: 'circle', color: palette.coral } },
+        { id: 'yellow', label: 'Yellow', picture: { icon: 'circle', color: palette.sunshine } },
+        { id: 'blue', label: 'Blue', picture: { icon: 'circle', color: palette.sea } },
+        { id: 'green', label: 'Green', picture: { icon: 'circle', color: palette.leaf } },
+        { id: 'purple', label: 'Purple', picture: { icon: 'circle', color: palette.lavender } },
+        { id: 'orange', label: 'Orange', picture: { icon: 'circle', color: palette.tangerine } },
+      ],
+    },
+  },
+];
