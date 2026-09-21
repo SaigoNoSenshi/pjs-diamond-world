@@ -5,6 +5,8 @@ import { palette } from '@/theme';
 export const creativeActivities: ActivityDefinition[] = [
   {
     id: 'act_draw_free',
+    grades: [1, 2, 3, 4, 5, 6],
+    subject: 'art',
     kind: 'DRAW',
     islandId: 'art',
     title: 'Draw & Paint',
@@ -18,6 +20,8 @@ export const creativeActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_draw_fish',
+    grades: [1, 2, 3, 4, 5, 6],
+    subject: 'art',
     kind: 'DRAW',
     islandId: 'art',
     title: 'Draw a Happy Fish',
@@ -31,6 +35,8 @@ export const creativeActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_craft_clay_cup',
+    grades: [1, 2, 3],
+    subject: 'craft',
     kind: 'CRAFT',
     islandId: 'crafts',
     title: "PJ's Clay Cup",
@@ -44,6 +50,8 @@ export const creativeActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_craft_paper_crown',
+    grades: [1, 2, 3],
+    subject: 'craft',
     kind: 'CRAFT',
     islandId: 'crafts',
     title: 'Paper Crown',
@@ -57,6 +65,8 @@ export const creativeActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_craft_leaf_print',
+    grades: [1, 2, 3],
+    subject: 'craft',
     kind: 'CRAFT',
     islandId: 'crafts',
     title: 'Leaf Print',

@@ -92,6 +92,22 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Content packs update between deploys: network first, cache as fallback.
+  if (url.pathname.startsWith(BASE + '/content/')) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          if (response.status === 200) {
+            const copy = response.clone();
+            caches.open(CACHE).then((cache) => cache.put(request.url.split('?')[0], copy)).catch(() => {});
+          }
+          return response;
+        })
+        .catch(() => caches.match(request.url.split('?')[0]).then((c) => c || Response.error())),
+    );
+    return;
+  }
+
   // Everything else is content-hashed or immutable per deploy: cache first.
   // Media elements ask for audio with a Range header; the Cache API never matches
   // those against the stored full file, so answer them ourselves with a 206 slice —

@@ -5,6 +5,8 @@ import { palette } from '@/theme';
 export const countingActivities: ActivityDefinition[] = [
   {
     id: 'act_count_sea',
+    grades: [1],
+    subject: 'math',
     kind: 'COUNTING',
     islandId: 'numbers',
     title: 'Count the Sea Friends',
@@ -54,6 +56,8 @@ export const countingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_count_big',
+    grades: [1],
+    subject: 'math',
     kind: 'COUNTING',
     islandId: 'numbers',
     title: 'Count to Twenty',
@@ -102,6 +106,8 @@ export const countingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_sort_colors',
+    grades: [1],
+    subject: 'math',
     kind: 'COUNTING',
     islandId: 'numbers',
     title: 'Sort by Color',
@@ -153,6 +159,8 @@ export const countingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_sort_shapes',
+    grades: [1],
+    subject: 'math',
     kind: 'COUNTING',
     islandId: 'numbers',
     title: 'Sort by Shape',
@@ -203,6 +211,8 @@ export const countingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_compare_more',
+    grades: [1],
+    subject: 'math',
     kind: 'COUNTING',
     islandId: 'numbers',
     title: 'More or Less?',

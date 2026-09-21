@@ -66,5 +66,6 @@ Walk this path with PJ watching, not helping:
 6. Kill the app, reopen: creations, garden and settings are still there.
 7. Tap a fish or crab on the island — it should bounce and say its name. Open **Letter Lagoon** → **Trace A**: trace with a finger; the dotted line turns green and Jelly says "A is for apple!". Open the **Daily Quest** and finish the three activities → the chest opens.
 8. (Web) Turn Wi-Fi off, reopen from the home screen: the island still loads.
+9. Grown-ups → **Learning**: pick PJ's grade (1–6). Back on the island the badge shows the grade and **Number Cove** offers that grade's math (Grade 3+ types answers on the keypad). Tap **Check now** — it should say "Up to date." or list new activities.
 
 Anything PJ cannot figure out without an adult explaining is a bug — note it in `docs/BUILD_LOG.md`.

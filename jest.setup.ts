@@ -67,3 +67,10 @@ jest.mock('expo-image-manipulator', () => ({
   ImageManipulator: { manipulate: jest.fn() },
   SaveFormat: { JPEG: 'jpeg', PNG: 'png' },
 }));
+
+// The Grade 1–6 banks are a lazy chunk in the app; tests see the whole curriculum.
+beforeAll(async () => {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const content = require('@/content/activities') as typeof import('@/content/activities');
+  await content.loadGradeContent();
+});

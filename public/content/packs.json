@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "publishedAt": "2026-09-21",
+  "note": "First remote pack: a bonus Science quiz for Grade 1 and a Grade 2 spelling bonus. Edit this file and push to main to update every device.",
+  "activities": [
+    {
+      "id": "act_remote_quiz_sea_colors_g1",
+      "kind": "QUIZ",
+      "islandId": "science",
+      "subject": "science",
+      "grades": [1],
+      "title": "Bonus: Sea Colors",
+      "icon": "fish",
+      "color": "#4ECDC4",
+      "voiceIntro": "A bonus quiz arrived! What color are these sea friends?",
+      "instruction": "Tap the right answer.",
+      "reward": { "diamonds": 3 },
+      "tags": ["quiz", "remote", "grade-1"],
+      "data": {
+        "kind": "QUIZ",
+        "pick": 4,
+        "questions": [
+          {
+            "id": "q1",
+            "prompt": "Which sea friend is orange?",
+            "choices": [
+              { "id": "a", "label": "Fish", "picture": { "icon": "fish", "color": "#FF9F1C" } },
+              { "id": "b", "label": "Whale", "picture": { "icon": "whale", "color": "#2E86DE" } },
+              { "id": "c", "label": "Turtle", "picture": { "icon": "turtle", "color": "#6BCB77" } }
+            ],
+            "answerId": "a"
+          },
+          {
+            "id": "q2",
+            "prompt": "Which sea friend is blue?",
+            "choices": [
+              { "id": "a", "label": "Crab", "picture": { "icon": "crab", "color": "#FF595E" } },
+              { "id": "b", "label": "Whale", "picture": { "icon": "whale", "color": "#2E86DE" } },
+              {
+                "id": "c",
+                "label": "Starfish",
+                "picture": { "icon": "starfish", "color": "#FF9F1C" }
+              }
+            ],
+            "answerId": "b"
+          },
+          {
+            "id": "q3",
+            "prompt": "Which sea friend is green?",
+            "choices": [
+              { "id": "a", "label": "Turtle", "picture": { "icon": "turtle", "color": "#6BCB77" } },
+              { "id": "b", "label": "Crab", "picture": { "icon": "crab", "color": "#FF595E" } },
+              {
+                "id": "c",
+                "label": "Jellyfish",
+                "picture": { "icon": "jellyfish", "color": "#FFD93D" }
+              }
+            ],
+            "answerId": "a"
+          },
+          {
+            "id": "q4",
+            "prompt": "Which sea friend is red?",
+            "choices": [
+              { "id": "a", "label": "Whale", "picture": { "icon": "whale", "color": "#2E86DE" } },
+              { "id": "b", "label": "Crab", "picture": { "icon": "crab", "color": "#FF595E" } },
+              {
+                "id": "c",
+                "label": "Seahorse",
+                "picture": { "icon": "seahorse", "color": "#4ECDC4" }
+              }
+            ],
+            "answerId": "b"
+          },
+          {
+            "id": "q5",
+            "prompt": "Which sea friend is yellow?",
+            "choices": [
+              {
+                "id": "a",
+                "label": "Jellyfish",
+                "picture": { "icon": "jellyfish", "color": "#FFD93D" }
+              },
+              { "id": "b", "label": "Whale", "picture": { "icon": "whale", "color": "#2E86DE" } },
+              { "id": "c", "label": "Turtle", "picture": { "icon": "turtle", "color": "#6BCB77" } }
+            ],
+            "answerId": "a"
+          }
+        ]
+      }
+    },
+    {
+      "id": "act_remote_math_addition_bonus_g2",
+      "kind": "MATH",
+      "islandId": "numbers",
+      "subject": "math",
+      "grades": [2],
+      "title": "Bonus: Quick Adding",
+      "icon": "sparkle",
+      "color": "#9B5DE5",
+      "voiceIntro": "A bonus adding round arrived! Tap the right answer.",
+      "instruction": "Tap the right answer.",
+      "reward": { "diamonds": 4 },
+      "tags": ["math", "remote", "grade-2"],
+      "data": {
+        "kind": "MATH",
+        "generator": "addition",
+        "grade": 2,
+        "rounds": 8,
+        "input": "choice"
+      }
+    }
+  ]
+}
