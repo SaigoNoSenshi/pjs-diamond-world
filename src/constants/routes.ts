@@ -16,6 +16,7 @@ export const routes = {
   parentGate: '/parent',
   parentHome: '/parent/home',
   parentSettings: '/parent/settings',
+  parentLearning: '/parent/learning',
   parentCreations: '/parent/creations',
   parentPrivacy: '/parent/privacy',
 } as const;
