@@ -10,6 +10,7 @@ import type {
   CreativeAssistantService,
   EventBus,
   MusicService,
+  NoteService,
   MusicTrack,
   SoundEffectKey,
   SoundEffectService,
@@ -80,6 +81,16 @@ export class SilentSoundEffectService implements SoundEffectService {
   readonly played: SoundEffectKey[] = [];
   play(key: SoundEffectKey): void {
     this.played.push(key);
+  }
+}
+
+export class SilentNoteService implements NoteService {
+  readonly played: string[] = [];
+  play(key: string): void {
+    this.played.push(key);
+  }
+  release(): void {
+    this.played.length = 0;
   }
 }
 
