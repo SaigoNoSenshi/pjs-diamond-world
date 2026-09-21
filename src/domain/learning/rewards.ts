@@ -33,13 +33,15 @@ export interface CompletionInput {
   activities: readonly ActivityDefinition[];
   /** Sticker catalogue ids, for the chest bonus. */
   stickerCatalogue: readonly string[];
+  /** Current grade, for a grade-appropriate quest when one has to be created. */
+  grade?: number;
 }
 
 export function recordCompletion(
   progress: LearningProgress,
   input: CompletionInput,
 ): { progress: LearningProgress; earned: Earned } {
-  const withQuest = ensureQuest(progress, input.activities, input.dateKey);
+  const withQuest = ensureQuest(progress, input.activities, input.dateKey, input.grade);
   const { activity } = input;
   const previous = withQuest.completions[activity.id];
   const first = !previous;

@@ -6,15 +6,17 @@ import { BigButton } from '@/components/BigButton';
 import { Celebration } from '@/components/Celebration';
 import { FriendlyError } from '@/components/FriendlyError';
 import { Icon, type IconName } from '@/components/icons/Icon';
+import { ScreenLoading } from '@/components/ScreenLoading';
 import { ScreenShell } from '@/components/ScreenShell';
 import { activitiesForIsland, findActivity } from '@/content/activities';
 import { findSticker } from '@/content/stickers';
 import { routes } from '@/constants/routes';
 import { strings, voicePrompts } from '@/constants/strings';
 import type { ActivityDefinition } from '@/domain/activity/schema';
-import type { Earned } from '@/domain/learning/rewards';
+import type { CompletionOutcome } from '@/features/learning/LearningProvider';
 import { DiamondCounter } from '@/features/learning/components/DiamondCounter';
 import { useLearning } from '@/features/learning/LearningProvider';
+import { useActivities } from '@/hooks/useActivities';
 import { useAppServices } from '@/hooks/useAppServices';
 import { useProfile } from '@/hooks/useProfile';
 import { useVoice } from '@/hooks/useVoice';
@@ -23,18 +25,24 @@ import { colors, palette, spacing, typography } from '@/theme';
 import { ColoringPlayer } from './engines/ColoringPlayer';
 import { CountingPlayer } from './engines/CountingPlayer';
 import { MatchingPlayer } from './engines/MatchingPlayer';
+import { MathPlayer } from './engines/MathPlayer';
 import { MusicMakerPlayer } from './engines/MusicMakerPlayer';
 import { PuzzlePlayer } from './engines/PuzzlePlayer';
 import { QuizPlayer } from './engines/QuizPlayer';
 import { StickerScenePlayer } from './engines/StickerScenePlayer';
 import { StoryPlayer } from './engines/StoryPlayer';
 import { TracePlayer } from './engines/TracePlayer';
+import { WordsPlayer } from './engines/WordsPlayer';
 
 /** Resolves an activity id and plays it with the right engine. */
 export function ActivityPlayerScreen({ activityId }: { activityId: string }) {
   const router = useRouter();
+  const { ready } = useLearning();
+  useActivities(); // re-render when the lazy grade banks or a remote pack land
   const activity = findActivity(activityId);
   if (!activity) {
+    // Deep link into a grade activity before its chunk has loaded: wait, don't apologise.
+    if (!ready) return <ScreenLoading />;
     return (
       <ScreenShell title={strings.app.worldName}>
         <FriendlyError onRetry={() => router.dismissTo(routes.home)} />
@@ -51,7 +59,7 @@ function ActivityPlayer({ activity }: { activity: ActivityDefinition }) {
   const { speak } = useVoice();
   const learning = useLearning();
   const [round, setRound] = useState(0);
-  const [earned, setEarned] = useState<Earned | null>(null);
+  const [earned, setEarned] = useState<CompletionOutcome | null>(null);
   const [busy, setBusy] = useState(false);
 
   // Drawing and crafts use their own full screens; remember which activity sent us.
@@ -89,7 +97,7 @@ function ActivityPlayer({ activity }: { activity: ActivityDefinition }) {
   };
   const backToIsland = () => router.replace(routes.island(activity.islandId));
   const nextActivity = () => {
-    const siblings = activitiesForIsland(activity.islandId);
+    const siblings = activitiesForIsland(activity.islandId, learning.grade);
     const next =
       siblings.find((a) => a.id !== activity.id && !learning.isCompleted(a.id)) ??
       siblings.find((a) => a.id !== activity.id);
@@ -112,9 +120,17 @@ function ActivityPlayer({ activity }: { activity: ActivityDefinition }) {
       </View>
       <Celebration
         visible={earned !== null}
-        message={strings.learning.greatJob(profile.nickname)}
-        icon={activity.icon as IconName}
-        voicePrompt={voicePrompts.complete(profile.nickname)}
+        message={
+          earned?.newGrade
+            ? strings.learning.levelUp(earned.newGrade)
+            : strings.learning.greatJob(profile.nickname)
+        }
+        icon={earned?.newGrade ? 'crown' : (activity.icon as IconName)}
+        voicePrompt={
+          earned?.newGrade
+            ? voicePrompts.levelUp(profile.nickname, earned.newGrade)
+            : voicePrompts.complete(profile.nickname)
+        }
       >
         {earned ? (
           <View style={styles.rewards}>
@@ -197,6 +213,10 @@ function Engine({
       return <StoryPlayer activity={{ ...activity, data }} onComplete={onComplete} />;
     case 'MUSIC_MAKER':
       return <MusicMakerPlayer activity={{ ...activity, data }} onComplete={onComplete} />;
+    case 'MATH':
+      return <MathPlayer activity={{ ...activity, data }} onComplete={onComplete} />;
+    case 'WORDS':
+      return <WordsPlayer activity={{ ...activity, data }} onComplete={onComplete} />;
     case 'DRAW':
     case 'CRAFT':
       return null; // redirected

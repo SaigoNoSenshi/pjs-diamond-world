@@ -77,6 +77,8 @@ export function QuizPlayer({
   };
 
   const cardSize = Math.min(150, Math.floor((width - spacing.lg * 2 - spacing.md * 3) / 2));
+  // Text-only answers (grade quizzes) get double-width cards so long words never break.
+  const wide = question.choices.some((c) => !c.picture);
 
   return (
     <View style={styles.root} testID="quiz-player">
@@ -86,11 +88,12 @@ export function QuizPlayer({
         {question.choices.map((choice) => (
           <ChoiceButton
             key={choice.id}
-            picture={choice.picture}
+            {...(choice.picture ? { picture: choice.picture } : {})}
             label={choice.label}
             state={states[choice.id] ?? 'idle'}
             onPress={() => choose(choice.id)}
             size={cardSize}
+            wide={wide}
             testID={`choice-${choice.id}`}
           />
         ))}

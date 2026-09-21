@@ -19,6 +19,8 @@ const act = (
   instruction: 'tap',
   reward: { diamonds: 3, ...(stickerId ? { stickerId } : {}) },
   tags: [],
+  grades: [1],
+  subject: 'english',
   data: {
     kind: 'QUIZ',
     pick: 1,

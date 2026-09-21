@@ -22,6 +22,8 @@ export const activityKindSchema = z.enum([
   'STICKER_SCENE',
   'STORY',
   'MUSIC_MAKER',
+  'MATH',
+  'WORDS',
   'DRAW',
   'CRAFT',
 ]);
@@ -69,17 +71,18 @@ export type TraceData = z.infer<typeof traceDataSchema>;
 
 export const quizChoiceSchema = z.object({
   id: z.string().min(1),
-  label: z.string().min(1).max(40),
-  picture: pictureSchema,
+  label: z.string().min(1).max(60),
+  /** Optional for older grades whose answers are words or numbers. */
+  picture: pictureSchema.optional(),
 });
 export type QuizChoice = z.infer<typeof quizChoiceSchema>;
 
 export const quizQuestionSchema = z
   .object({
     id: z.string().min(1),
-    prompt: z.string().min(1).max(90),
+    prompt: z.string().min(1).max(140),
     /** Spoken version when it differs from the prompt. */
-    voice: z.string().max(120).optional(),
+    voice: z.string().max(160).optional(),
     choices: z.array(quizChoiceSchema).min(2).max(4),
     answerId: z.string().min(1),
   })
@@ -265,6 +268,62 @@ export const musicMakerDataSchema = z.object({
 });
 export type MusicMakerData = z.infer<typeof musicMakerDataSchema>;
 
+// ---------- MATH (procedurally generated) ----------
+
+export const mathGeneratorIdSchema = z.enum([
+  'addition',
+  'subtraction',
+  'compare',
+  'skipCount',
+  'placeValue',
+  'multiplication',
+  'division',
+  'fractions',
+  'time',
+  'money',
+  'decimals',
+  'percent',
+  'areaPerimeter',
+  'integers',
+  'orderOfOps',
+  'ratios',
+  'exponents',
+  'volume',
+  'wordProblem',
+]);
+export type MathGeneratorId = z.infer<typeof mathGeneratorIdSchema>;
+
+export const mathDataSchema = z.object({
+  kind: z.literal('MATH'),
+  generator: mathGeneratorIdSchema,
+  /** Grade 1..6 controls the number ranges and concepts. */
+  grade: z.number().int().min(1).max(6),
+  rounds: z.number().int().min(3).max(12).default(6),
+  /** 'auto' = choices for grades 1–2, keypad from grade 3. */
+  input: z.enum(['choice', 'keypad', 'auto']).default('auto'),
+});
+export type MathData = z.infer<typeof mathDataSchema>;
+
+// ---------- WORDS (spelling, vocabulary, grammar) ----------
+
+export const wordsModeSchema = z.enum([
+  'spell',
+  'missing',
+  'unscramble',
+  'synonym',
+  'antonym',
+  'partOfSpeech',
+]);
+export type WordsMode = z.infer<typeof wordsModeSchema>;
+
+export const wordsDataSchema = z.object({
+  kind: z.literal('WORDS'),
+  mode: wordsModeSchema,
+  grade: z.number().int().min(1).max(6),
+  rounds: z.number().int().min(3).max(12).default(6),
+});
+export type WordsData = z.infer<typeof wordsDataSchema>;
+
 // ---------- DRAW / CRAFT (existing engines) ----------
 
 export const drawDataSchema = z.object({
@@ -284,6 +343,8 @@ export const activityDataSchema = z.union([
   stickerSceneDataSchema,
   storyDataSchema,
   musicMakerDataSchema,
+  mathDataSchema,
+  wordsDataSchema,
   drawDataSchema,
   craftDataSchema,
 ]);
@@ -309,7 +370,24 @@ export const activityDefinitionSchema = z
     instruction: z.string().min(1).max(90),
     reward: activityRewardSchema,
     tags: z.array(z.string()).default([]),
+    /** Grades (1–6) this activity is shown for. Defaults to Grade 1. */
+    grades: z.array(z.number().int().min(1).max(6)).min(1).default([1]),
+    /** Subject for reports and quest balancing. */
+    subject: z
+      .enum([
+        'english',
+        'math',
+        'science',
+        'filipino',
+        'araling_panlipunan',
+        'art',
+        'music',
+        'craft',
+      ])
+      .default('art'),
     data: activityDataSchema,
   })
   .refine((a) => a.kind === a.data.kind, 'kind must match data.kind');
 export type ActivityDefinition = z.infer<typeof activityDefinitionSchema>;
+/** Authoring shape: optional fields may be omitted and are filled by the schema defaults. */
+export type ActivityInput = z.input<typeof activityDefinitionSchema>;
