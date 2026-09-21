@@ -24,7 +24,9 @@ export async function captureDrawing(
   const height = Math.max(1, Math.round(rect.height || options.height));
 
   const svgs = [...container.querySelectorAll('svg')];
-  const strokeLayer = svgs.find((s) => s.id === 'stroke-layer') ?? svgs[0];
+  // Only the drawing canvas has a stroke layer in canvas coordinates; every other <svg>
+  // (icons, coloring pages, sticker scenes) is placed by its own viewBox and bounds.
+  const strokeLayer = svgs.find((s) => s.id === 'stroke-layer') ?? null;
   const parts: string[] = [];
   parts.push(
     `<rect x="0" y="0" width="${width}" height="${height}" fill="${escapeAttr(options.backgroundColor)}"/>`,
