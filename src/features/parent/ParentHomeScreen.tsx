@@ -24,6 +24,13 @@ const ENTRIES: readonly {
     testID: 'parent-settings',
   },
   {
+    icon: 'abc',
+    title: parentStrings.home.learning,
+    hint: parentStrings.home.learningHint,
+    route: routes.parentLearning,
+    testID: 'parent-learning',
+  },
+  {
     icon: 'book',
     title: parentStrings.home.creations,
     hint: parentStrings.home.creationsHint,
