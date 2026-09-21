@@ -2,7 +2,7 @@
 
 **Live app (web):** https://saigonosenshi.github.io/pjs-diamond-world/ — open on the tablet, then Share → Add to Home Screen.
 
-A child-first creative world for a kindergartner: draw and paint, follow real-world crafts, photograph what you made, keep it in **My Diamond Book**, and watch **Diamond Island** grow. Guided by **Jelly**, an original yellow jellyfish.
+A child-first creative and learning world for a kindergartner (Philippines Grade 1 level): six learning islands — **Letter Lagoon** (tracing, phonics), **Number Cove** (counting, sorting, shapes, patterns), **Color & Art Bay** (drawing, coloring pages, sticker scenes, puzzles, music maker), **Science Shore** (animals, body, weather), **Story Reef** (read-along stories), **Craft Beach** (real crafts with a camera) — a **Daily Quest** with a treasure chest, diamonds and a 36-sticker album, plus **My Garden**, **Music Reef** and **My Diamond Book**. 79 original activities in the first wave; every activity is data, so the list keeps growing. Guided by **Jelly**, an original yellow jellyfish.
 
 Built with Expo SDK 57, Expo Router, React Native, and TypeScript strict. Offline-first, local-only by default, no accounts, no ads, no tracking. See `docs/CHILD_SAFETY.md`.
 
