@@ -24,6 +24,8 @@ export interface ChoiceButtonProps {
   state?: ChoiceState;
   onPress: () => void;
   size?: number;
+  /** Double-width card for text-only answers so long words never break mid-word. */
+  wide?: boolean;
   disabled?: boolean;
   testID?: string;
   accessibilityLabel?: string;
@@ -40,6 +42,7 @@ export function ChoiceButton({
   state = 'idle',
   onPress,
   size = 132,
+  wide = false,
   disabled = false,
   testID,
   accessibilityLabel,
@@ -77,7 +80,9 @@ export function ChoiceButton({
         testID={testID}
         style={({ pressed }) => [
           styles.card,
-          { width: size, minHeight: size },
+          wide
+            ? { width: size * 2 + spacing.md, minHeight: Math.round(size * 0.7) }
+            : { width: size, minHeight: size },
           state === 'correct' && styles.correct,
           state === 'dim' && styles.dim,
           pressed && styles.pressed,
@@ -91,7 +96,12 @@ export function ChoiceButton({
           <PictureView picture={picture} size={Math.round(size * 0.55)} />
         ) : null}
         {label && text === undefined ? (
-          <Text style={styles.label} numberOfLines={1}>
+          <Text
+            style={[styles.label, !picture && styles.labelOnly]}
+            numberOfLines={picture ? 1 : 3}
+            adjustsFontSizeToFit
+            minimumFontScale={0.7}
+          >
             {label}
           </Text>
         ) : null}
@@ -126,6 +136,7 @@ const styles = StyleSheet.create({
     fontWeight: typography.weight.bold,
     color: colors.text,
   },
+  labelOnly: { fontSize: typography.size.label, textAlign: 'center' },
   bigText: {
     fontFamily: typography.family,
     fontWeight: typography.weight.black,
