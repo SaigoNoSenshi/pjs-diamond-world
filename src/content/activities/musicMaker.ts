@@ -4,6 +4,8 @@ import { palette } from '@/theme';
 export const musicMakerActivities: ActivityDefinition[] = [
   {
     id: 'act_music_xylophone',
+    grades: [1, 2, 3, 4, 5, 6],
+    subject: 'music',
     kind: 'MUSIC_MAKER',
     islandId: 'art',
     title: 'Rainbow Xylophone',
@@ -31,6 +33,8 @@ export const musicMakerActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_music_drums',
+    grades: [1, 2, 3, 4, 5, 6],
+    subject: 'music',
     kind: 'MUSIC_MAKER',
     islandId: 'art',
     title: 'Beach Drums',
