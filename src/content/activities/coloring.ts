@@ -5,6 +5,8 @@ export const coloringActivities: ActivityDefinition[] = [
   // ── 1. Fish ──────────────────────────────────────────────────────────────
   {
     id: 'act_color_fish',
+    grades: [1, 2, 3],
+    subject: 'art',
     kind: 'COLORING',
     islandId: 'art',
     title: 'Color the Fish',
@@ -97,6 +99,8 @@ export const coloringActivities: ActivityDefinition[] = [
   // ── 2. Flower ─────────────────────────────────────────────────────────────
   {
     id: 'act_color_flower',
+    grades: [1, 2, 3],
+    subject: 'art',
     kind: 'COLORING',
     islandId: 'art',
     title: 'Color the Flower',
@@ -189,6 +193,8 @@ export const coloringActivities: ActivityDefinition[] = [
   // ── 3. Butterfly ─────────────────────────────────────────────────────────
   {
     id: 'act_color_butterfly',
+    grades: [1, 2, 3],
+    subject: 'art',
     kind: 'COLORING',
     islandId: 'art',
     title: 'Color the Butterfly',
@@ -283,6 +289,8 @@ export const coloringActivities: ActivityDefinition[] = [
   // ── 4. House ─────────────────────────────────────────────────────────────
   {
     id: 'act_color_house',
+    grades: [1, 2, 3],
+    subject: 'art',
     kind: 'COLORING',
     islandId: 'art',
     title: 'Color the House',
@@ -369,6 +377,8 @@ export const coloringActivities: ActivityDefinition[] = [
   // ── 5. Robot ─────────────────────────────────────────────────────────────
   {
     id: 'act_color_robot',
+    grades: [1, 2, 3],
+    subject: 'art',
     kind: 'COLORING',
     islandId: 'art',
     title: 'Color the Robot',
@@ -467,6 +477,8 @@ export const coloringActivities: ActivityDefinition[] = [
   // ── 6. Jellyfish ─────────────────────────────────────────────────────────
   {
     id: 'act_color_jelly',
+    grades: [1, 2, 3],
+    subject: 'art',
     kind: 'COLORING',
     islandId: 'art',
     title: 'Color the Jellyfish',
