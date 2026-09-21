@@ -73,3 +73,55 @@ describe('drawingReducer', () => {
     expect(canUndo(s)).toBe(false);
   });
 });
+
+describe('COMMIT_STROKE (fast canvases commit a whole stroke once)', () => {
+  const commit = (
+    s: DrawingState,
+    points: { x: number; y: number }[],
+    kind: 'brush' | 'eraser' = 'brush',
+  ) =>
+    drawingReducer(s, {
+      type: 'COMMIT_STROKE',
+      id: 'c1',
+      kind,
+      color: '#00FF00',
+      width: 12,
+      points,
+    });
+
+  it('adds one element with thinned points and pushes history', () => {
+    let s = createDrawingState('#FFFFFF');
+    s = commit(s, [
+      { x: 0, y: 0 },
+      { x: 0.5, y: 0.5 }, // too close to the first → dropped
+      { x: 10, y: 10 },
+      { x: 20, y: 20 },
+    ]);
+    expect(s.elements).toHaveLength(1);
+    const el = s.elements[0]!;
+    expect(el.type === 'stroke' && el.stroke.points).toEqual([
+      { x: 0, y: 0 },
+      { x: 10, y: 10 },
+      { x: 20, y: 20 },
+    ]);
+    expect(canUndo(s)).toBe(true);
+    expect(canRedo(s)).toBe(false);
+    expect(isEmpty(s)).toBe(false);
+    s = drawingReducer(s, { type: 'UNDO' });
+    expect(isEmpty(s)).toBe(true);
+    expect(canRedo(s)).toBe(true);
+  });
+
+  it('keeps a single tap as a dot and paints the eraser in the background colour', () => {
+    let s = createDrawingState('#FFF7E6');
+    s = commit(s, [{ x: 5, y: 5 }], 'eraser');
+    const el = s.elements[0]!;
+    expect(el.type === 'stroke' && el.stroke.points).toHaveLength(1);
+    expect(el.type === 'stroke' && el.stroke.color).toBe('#FFF7E6');
+  });
+
+  it('ignores an empty point list', () => {
+    const s = createDrawingState();
+    expect(commit(s, [])).toBe(s);
+  });
+});
