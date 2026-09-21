@@ -23,7 +23,7 @@ const BUDGET = {
   // illustrations (WebP ≤47 KB each, loaded only by the screen that shows them) and 12
   // Music Maker notes. Entry stayed at 635 KB gzip; assets are per-screen lazy loads.
   entryGzipKB: 650, // main JS chunk (what must load before Diamond Island appears)
-  totalJsGzipKB: 1000, // every JS chunk together, incl. the never-loaded-by-default Firebase chunk
+  totalJsGzipKB: 1100, // every JS chunk together, incl. the never-loaded-by-default Firebase chunk and the lazy Grade 1–6 content chunk (Phase 18)
   assetsKB: 1600, // images + audio + icons shipped with the app (raw bytes)
   largestAssetKB: 160, // any single image/audio file
 };
