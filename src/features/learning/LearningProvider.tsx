@@ -9,10 +9,12 @@ import {
   type PropsWithChildren,
 } from 'react';
 
-import { activities, findActivity } from '@/content/activities';
+import { findActivity, loadGradeContent } from '@/content/activities';
+import { allActivities } from '@/content/activities/registry';
 import { stickerIds } from '@/content/stickers';
 import type { ActivityDefinition } from '@/domain/activity/schema';
 import { ensureQuest } from '@/domain/learning/dailyQuest';
+import { clampGrade, nextGrade } from '@/domain/learning/grades';
 import { recordCompletion, type Earned } from '@/domain/learning/rewards';
 import {
   createInitialLearningProgress,
@@ -20,16 +22,24 @@ import {
   type LearningProgress,
 } from '@/domain/learning/schema';
 import { createProgressionEvent } from '@/domain/progression/events';
+import { useActivities } from '@/hooks/useActivities';
 import { useAppServices } from '@/hooks/useAppServices';
 import { useProfile } from '@/hooks/useProfile';
 import { createId } from '@/utils/ids';
 import { nowIso } from '@/utils/time';
 
+export interface CompletionOutcome extends Earned {
+  /** Set when this completion unlocked the next grade (auto-advance). */
+  newGrade: number | null;
+}
+
 export interface LearningContextValue {
   progress: LearningProgress;
   ready: boolean;
-  /** Record a finished activity: diamonds, sticker, quest, garden event. Never throws. */
-  complete(activity: ActivityDefinition, score?: number): Promise<Earned>;
+  /** The child's current grade (1–6). */
+  grade: number;
+  /** Record a finished activity: diamonds, sticker, quest, garden event, grade. Never throws. */
+  complete(activity: ActivityDefinition, score?: number): Promise<CompletionOutcome>;
   /** Remember which DRAW/CRAFT activity the child opened so its save completes it. */
   setPendingActivity(activityId: string | null): void;
   isCompleted(activityId: string): boolean;
@@ -37,22 +47,25 @@ export interface LearningContextValue {
 
 export const LearningContext = createContext<LearningContextValue | null>(null);
 
-const NO_EARNED: Earned = {
+const NO_EARNED: CompletionOutcome = {
   diamonds: 0,
   stickerId: null,
   questJustCompleted: false,
   chestStickerId: null,
+  newGrade: null,
 };
 
 /**
- * Owns diamonds, stickers, completions and the Daily Quest for the current child.
- * Also completes DRAW / CRAFT activities when the drawing or craft is actually saved
- * (those engines live outside the activity player), by listening to the event bus.
+ * Owns diamonds, stickers, completions, the Daily Quest and grade progression for the
+ * current child. Also completes DRAW / CRAFT activities when the drawing or craft is
+ * actually saved (event bus), by listening to the event bus.
  */
 export function LearningProvider({ children }: PropsWithChildren) {
   const { repositories, logger, eventBus } = useAppServices();
-  const { profile } = useProfile();
+  const { profile, settings, updateSettings } = useProfile();
+  const activities = useActivities();
   const childId = profile.id;
+  const grade = clampGrade(settings.grade);
   const [progress, setProgress] = useState<LearningProgress>(() =>
     createInitialLearningProgress(childId, nowIso()),
   );
@@ -61,18 +74,31 @@ export function LearningProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     progressRef.current = progress;
   }, [progress]);
+  const gradeRef = useRef(grade);
+  useEffect(() => {
+    gradeRef.current = grade;
+  }, [grade]);
+  const settingsRef = useRef(settings);
+  useEffect(() => {
+    settingsRef.current = settings;
+  }, [settings]);
   const pending = useRef<string | null>(null);
   // Serialise completions so two quick saves cannot lose diamonds.
   const queue = useRef<Promise<unknown>>(Promise.resolve());
 
   useEffect(() => {
     let mounted = true;
-    repositories.learning
-      .get(childId)
-      .then((loaded) => {
+    // Grade banks are a lazy chunk; wait for them so the daily quest and mastery see the
+    // whole curriculum. If the chunk fails (offline before first visit) the core packs
+    // still work and the load is retried on the next mount.
+    const gradeContent = loadGradeContent().catch((error: unknown) =>
+      logger.error('grade content load failed', error),
+    );
+    Promise.all([repositories.learning.get(childId), gradeContent])
+      .then(([loaded]) => {
         if (!mounted) return;
         const base = loaded ?? createInitialLearningProgress(childId, nowIso());
-        setProgress(ensureQuest(base, activities, dateKeyFor(new Date())));
+        setProgress(ensureQuest(base, allActivities(), dateKeyFor(new Date()), gradeRef.current));
       })
       .catch((error: unknown) => logger.error('learning progress load failed', error))
       .finally(() => {
@@ -84,17 +110,19 @@ export function LearningProvider({ children }: PropsWithChildren) {
   }, [repositories.learning, childId, logger]);
 
   const complete = useCallback(
-    (activity: ActivityDefinition, score?: number): Promise<Earned> => {
-      const run = async (): Promise<Earned> => {
+    (activity: ActivityDefinition, score?: number): Promise<CompletionOutcome> => {
+      const run = async (): Promise<CompletionOutcome> => {
         try {
           const now = nowIso();
+          const all = allActivities();
           const { progress: next, earned } = recordCompletion(progressRef.current, {
             activity,
             now,
             dateKey: dateKeyFor(new Date()),
             ...(score !== undefined ? { score } : {}),
-            activities,
+            activities: all,
             stickerCatalogue: stickerIds,
+            grade: gradeRef.current,
           });
           progressRef.current = next;
           setProgress(next);
@@ -107,7 +135,16 @@ export function LearningProvider({ children }: PropsWithChildren) {
               { id: createId('evt'), occurredAt: now },
             ),
           );
-          return earned;
+          // Grade progression (auto-advance): never down, at most one step per completion.
+          let newGrade: number | null = null;
+          const current = gradeRef.current;
+          const target = nextGrade(next, all, current, settingsRef.current.autoAdvanceGrade);
+          if (target > current) {
+            newGrade = Math.min(target, current + 1);
+            gradeRef.current = newGrade;
+            await updateSettings({ grade: newGrade });
+          }
+          return { ...earned, newGrade };
         } catch (error) {
           logger.error('activity completion failed', error, { activity: activity.id });
           return NO_EARNED;
@@ -117,7 +154,7 @@ export function LearningProvider({ children }: PropsWithChildren) {
       queue.current = result;
       return result;
     },
-    [repositories.learning, eventBus, childId, logger],
+    [repositories.learning, eventBus, childId, logger, updateSettings],
   );
 
   // Drawings and crafts complete their activities when they are really saved.
@@ -131,7 +168,7 @@ export function LearningProvider({ children }: PropsWithChildren) {
         if (activity?.kind === 'DRAW') void complete(activity);
       } else if (event.type === 'CRAFT_COMPLETED' && event.payload.craftId) {
         const craftId = event.payload.craftId;
-        const activity = activities.find(
+        const activity = allActivities().find(
           (a) => a.data.kind === 'CRAFT' && a.data.craftId === craftId,
         );
         if (activity) void complete(activity);
@@ -149,9 +186,10 @@ export function LearningProvider({ children }: PropsWithChildren) {
   );
 
   const value = useMemo<LearningContextValue>(
-    () => ({ progress, ready, complete, setPendingActivity, isCompleted }),
-    [progress, ready, complete, setPendingActivity, isCompleted],
+    () => ({ progress, ready, grade, complete, setPendingActivity, isCompleted }),
+    [progress, ready, grade, complete, setPendingActivity, isCompleted],
   );
+  void activities; // subscription keeps consumers current when remote packs arrive
 
   return <LearningContext.Provider value={value}>{children}</LearningContext.Provider>;
 }
