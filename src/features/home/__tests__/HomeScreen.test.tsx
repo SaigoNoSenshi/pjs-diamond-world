@@ -5,23 +5,24 @@ import { createTestServices } from '@/services/container';
 import { SilentAudioPromptService } from '@/services/defaults';
 import { renderApp } from '@/test-utils/renderApp';
 
-import { CreateHubScreen } from '../CreateHubScreen';
 import { HomeScreen } from '../HomeScreen';
+import { dayPhaseFor, PHASE_GREETING } from '../dayNight';
 
 function Stub({ label }: { label: string }) {
   return <Text>{label}</Text>;
 }
 
-describe('Diamond Island navigation', () => {
-  it('shows the four primary areas and navigates to Create → Draw', async () => {
+describe('Diamond Island map', () => {
+  it('shows the six islands and the child’s places, speaks a greeting, and opens an island', async () => {
     const voice = new SilentAudioPromptService();
     const services = createTestServices({ voice });
 
     const { app, q } = await renderApp(
       {
         home: HomeScreen,
-        'create/index': CreateHubScreen,
-        'create/draw': () => <Stub label="draw-screen" />,
+        'island/[islandId]': () => <Stub label="island-screen" />,
+        quest: () => <Stub label="quest-screen" />,
+        stickers: () => <Stub label="stickers-screen" />,
         garden: () => <Stub label="garden-screen" />,
         music: () => <Stub label="music-screen" />,
         'book/index': () => <Stub label="book-screen" />,
@@ -31,19 +32,26 @@ describe('Diamond Island navigation', () => {
     );
 
     await waitFor(() => expect(app.getPathname()).toBe('/home'));
-    for (const label of ['Create', 'My Garden', 'Music Reef', 'My Diamond Book']) {
-      expect(await q.findByRole('button', { name: label })).toBeTruthy();
+    for (const id of ['letters', 'numbers', 'art', 'science', 'stories', 'crafts']) {
+      expect(await q.findByTestId(`island-${id}`)).toBeTruthy();
     }
-    // Home speaks its hint once.
-    await waitFor(() => expect(voice.spoken).toContain('What do you want to do?'));
+    for (const id of ['home-quest', 'home-garden', 'home-music', 'home-book', 'home-stickers']) {
+      expect(q.getByTestId(id)).toBeTruthy();
+    }
+    await waitFor(() => expect(voice.spoken).toContain(PHASE_GREETING[dayPhaseFor(new Date())]));
 
-    await fireEvent.press(q.getByRole('button', { name: 'Create' }));
-    await waitFor(() => expect(app.getPathname()).toBe('/create'));
-    expect(await q.findByRole('button', { name: 'Draw & Paint' })).toBeTruthy();
-    expect(q.getByRole('button', { name: 'Craft With Me' })).toBeTruthy();
+    await fireEvent.press(q.getByTestId('island-letters'));
+    await waitFor(() => expect(app.getPathname()).toBe('/island/letters'));
+    expect(await q.findByText('island-screen')).toBeTruthy();
+  });
+});
 
-    await fireEvent.press(q.getByRole('button', { name: 'Draw & Paint' }));
-    await waitFor(() => expect(app.getPathname()).toBe('/create/draw'));
-    expect(await q.findByText('draw-screen')).toBeTruthy();
+describe('dayPhaseFor', () => {
+  it('maps hours to phases', () => {
+    expect(dayPhaseFor(new Date(2026, 0, 1, 6))).toBe('morning');
+    expect(dayPhaseFor(new Date(2026, 0, 1, 12))).toBe('day');
+    expect(dayPhaseFor(new Date(2026, 0, 1, 18))).toBe('evening');
+    expect(dayPhaseFor(new Date(2026, 0, 1, 21))).toBe('night');
+    expect(dayPhaseFor(new Date(2026, 0, 1, 2))).toBe('night');
   });
 });
