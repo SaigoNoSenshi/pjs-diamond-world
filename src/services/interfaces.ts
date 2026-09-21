@@ -41,6 +41,12 @@ export interface SoundEffectService {
   play(key: SoundEffectKey): void;
 }
 
+/** Short musical notes / drum hits for the Music Maker (keys from content/music/notes). */
+export interface NoteService {
+  play(key: string): void;
+  release(): void;
+}
+
 export interface CapturedPhoto {
   uri: string;
   width: number;
