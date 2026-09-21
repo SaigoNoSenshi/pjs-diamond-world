@@ -5,6 +5,8 @@ import { palette } from '@/theme';
 export const matchingActivities: ActivityDefinition[] = [
   {
     id: 'act_match_sea',
+    grades: [1, 2],
+    subject: 'science',
     kind: 'MATCHING',
     islandId: 'science',
     title: 'Sea Friends Memory',
@@ -29,6 +31,8 @@ export const matchingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_match_shapes',
+    grades: [1, 2],
+    subject: 'math',
     kind: 'MATCHING',
     islandId: 'numbers',
     title: 'Shape Memory',
@@ -53,6 +57,8 @@ export const matchingActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_match_colors',
+    grades: [1, 2],
+    subject: 'art',
     kind: 'MATCHING',
     islandId: 'art',
     title: 'Color Memory',

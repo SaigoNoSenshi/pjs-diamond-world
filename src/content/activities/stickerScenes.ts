@@ -4,6 +4,8 @@ import { palette } from '@/theme';
 export const stickerSceneActivities: ActivityDefinition[] = [
   {
     id: 'act_scene_island',
+    grades: [1, 2, 3],
+    subject: 'art',
     kind: 'STICKER_SCENE',
     islandId: 'art',
     title: 'Decorate the Island',
@@ -35,6 +37,8 @@ export const stickerSceneActivities: ActivityDefinition[] = [
   },
   {
     id: 'act_scene_sea',
+    grades: [1, 2, 3],
+    subject: 'art',
     kind: 'STICKER_SCENE',
     islandId: 'science',
     title: 'Under the Sea',
