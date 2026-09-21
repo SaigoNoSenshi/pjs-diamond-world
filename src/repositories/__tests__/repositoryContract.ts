@@ -88,6 +88,31 @@ export function runRepositoryContract(
       expect(await repos.drafts.getCurrent(childId)).toBeNull();
     });
 
+    it('stores learning progress (diamonds, stickers, quest)', async () => {
+      const repos = await factory();
+      expect(await repos.learning.get(childId)).toBeNull();
+      await repos.learning.save({
+        childId,
+        diamonds: 12,
+        stickers: ['stk_star'],
+        completions: { act_trace_a: { count: 2, lastAt: '2026-09-21T00:00:00.000Z', best: 0.9 } },
+        quest: {
+          dateKey: '2026-09-21',
+          activityIds: ['act_a', 'act_b', 'act_c'],
+          completedIds: ['act_a'],
+          chestOpened: false,
+        },
+        updatedAt: '2026-09-21T00:00:00.000Z',
+      });
+      const loaded = await repos.learning.get(childId);
+      expect(loaded?.diamonds).toBe(12);
+      expect(loaded?.stickers).toEqual(['stk_star']);
+      expect(loaded?.completions['act_trace_a']?.best).toBe(0.9);
+      expect(loaded?.quest?.completedIds).toEqual(['act_a']);
+      await repos.learning.save({ ...loaded!, diamonds: 20 });
+      expect((await repos.learning.get(childId))?.diamonds).toBe(20);
+    });
+
     it('returns a default profile and patches settings', async () => {
       const repos = await factory();
       const profile = await repos.settings.getProfile();
