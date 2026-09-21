@@ -6,6 +6,8 @@ export const quizActivities: ActivityDefinition[] = [
   // 1. Letter Sounds
   {
     id: 'act_quiz_letter_sounds',
+    grades: [1],
+    subject: 'english',
     kind: 'QUIZ',
     islandId: 'letters',
     title: 'Jelly Asks: Letter Sounds',
@@ -106,6 +108,8 @@ export const quizActivities: ActivityDefinition[] = [
   // 2. Find the Letter
   {
     id: 'act_quiz_find_letter',
+    grades: [1],
+    subject: 'english',
     kind: 'QUIZ',
     islandId: 'letters',
     title: 'Jelly Asks: Find the Letter',
@@ -196,6 +200,8 @@ export const quizActivities: ActivityDefinition[] = [
   // 3. Colors
   {
     id: 'act_quiz_colors',
+    grades: [1],
+    subject: 'art',
     kind: 'QUIZ',
     islandId: 'art',
     title: 'Jelly Asks: Colors',
@@ -300,6 +306,8 @@ export const quizActivities: ActivityDefinition[] = [
   // 4. Shapes
   {
     id: 'act_quiz_shapes',
+    grades: [1, 2],
+    subject: 'math',
     kind: 'QUIZ',
     islandId: 'numbers',
     title: 'Jelly Asks: Shapes',
@@ -430,6 +438,8 @@ export const quizActivities: ActivityDefinition[] = [
   // 5. Numbers
   {
     id: 'act_quiz_numbers',
+    grades: [1, 2],
+    subject: 'math',
     kind: 'QUIZ',
     islandId: 'numbers',
     title: 'Jelly Asks: Numbers',
@@ -530,6 +540,8 @@ export const quizActivities: ActivityDefinition[] = [
   // 6. Animals
   {
     id: 'act_quiz_animals',
+    grades: [1, 2],
+    subject: 'science',
     kind: 'QUIZ',
     islandId: 'science',
     title: 'Jelly Asks: Animals',
@@ -638,6 +650,8 @@ export const quizActivities: ActivityDefinition[] = [
   // 7. Body and Senses
   {
     id: 'act_quiz_body_senses',
+    grades: [1, 2],
+    subject: 'science',
     kind: 'QUIZ',
     islandId: 'science',
     title: 'Jelly Asks: Body and Senses',
@@ -728,6 +742,8 @@ export const quizActivities: ActivityDefinition[] = [
   // 8. Living Things and Weather
   {
     id: 'act_quiz_living_weather',
+    grades: [1, 2],
+    subject: 'science',
     kind: 'QUIZ',
     islandId: 'science',
     title: 'Jelly Asks: Living Things',
