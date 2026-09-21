@@ -23,7 +23,9 @@ export function installUserGestureTracking(onAutoplayBlocked?: (message: string)
   window.addEventListener('touchstart', mark, true);
   window.addEventListener('unhandledrejection', (event) => {
     const message = String((event.reason && (event.reason.message ?? event.reason)) ?? '');
-    if (/play\(\) failed|NotAllowedError|user didn't interact/i.test(message)) {
+    // NotSupportedError: the media element could not load its source (e.g. a sound
+    // file unavailable offline). Sound is decoration — never an error for the child.
+    if (/play\(\) failed|NotAllowedError|NotSupportedError|user didn't interact/i.test(message)) {
       event.preventDefault();
       onAutoplayBlocked?.(message);
     }
