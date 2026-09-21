@@ -6,6 +6,8 @@ export const storyActivities: ActivityDefinition[] = [
   // 1. Jelly's Lost Diamond
   {
     id: 'act_story_lost_diamond',
+    grades: [1, 2],
+    subject: 'english',
     kind: 'STORY',
     islandId: 'stories',
     title: "Jelly's Lost Diamond",
@@ -55,6 +57,8 @@ export const storyActivities: ActivityDefinition[] = [
   // 2. The Princess and the Rainbow Fish
   {
     id: 'act_story_rainbow_fish',
+    grades: [1, 2],
+    subject: 'english',
     kind: 'STORY',
     islandId: 'stories',
     title: 'The Princess and the Rainbow Fish',
@@ -116,6 +120,8 @@ export const storyActivities: ActivityDefinition[] = [
   // 3. PJ's Robot Pig Day
   {
     id: 'act_story_robot_pig',
+    grades: [1, 2],
+    subject: 'english',
     kind: 'STORY',
     islandId: 'stories',
     title: "PJ's Robot Pig Day",
