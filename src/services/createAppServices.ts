@@ -11,6 +11,7 @@ import { ExpoSoundEffectService } from './audio/ExpoSoundEffectService';
 import { ExpoSpeechPromptService } from './audio/ExpoSpeechPromptService';
 import { installUserGestureTracking } from './audio/userGesture';
 import { ExpoCameraService } from './camera/ExpoCameraService';
+import { defaultContentUrl, RemoteContentService } from './content/RemoteContentService';
 import { createTestServices, type AppServices } from './container';
 import { createLogger } from './logging/logger';
 import { createThumbnailMaker } from './media/thumbnails';
@@ -50,8 +51,20 @@ export function createAppServices(): Promise<AppServices> {
         },
         logger,
       );
+      const remoteContent = new RemoteContentService(
+        defaultContentUrl(
+          Platform.OS,
+          (process.env.EXPO_PUBLIC_WEB_BASE ?? '').replace(/\/+$/, ''),
+        ),
+        logger,
+      );
+      // Cached pack first (works offline), then a background refresh. Never blocks the UI.
+      void remoteContent
+        .start()
+        .then((r) => logger.info('remote content', { status: r.status, added: r.added }));
       return createTestServices({
         sync,
+        remoteContent,
         makeThumbnail: createThumbnailMaker(logger),
         logger,
         repositories,

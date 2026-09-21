@@ -25,6 +25,7 @@ import type {
   SoundEffectService,
   SyncService,
 } from './interfaces';
+import { RemoteContentService } from './content/RemoteContentService';
 import { createLogger, type Logger } from './logging/logger';
 import { ProgressionService } from './progression/ProgressionService';
 
@@ -45,6 +46,8 @@ export interface AppServices {
   analytics: AnalyticsService;
   assistant: CreativeAssistantService;
   progression: ProgressionService;
+  /** Auto-updating content packs from the app's own site (no-op when no URL). */
+  remoteContent: RemoteContentService;
   /** Produces small JPEG thumbnails from local images; null on web/failure. */
   makeThumbnail: (uri: string) => Promise<string | null>;
 }
@@ -64,6 +67,7 @@ export function createTestServices(overrides: Partial<AppServices> = {}): AppSer
     repositories,
     eventBus,
     progression,
+    remoteContent: overrides.remoteContent ?? new RemoteContentService(null, logger),
     voice: overrides.voice ?? new SilentAudioPromptService(),
     music: overrides.music ?? new SilentMusicService(musicTracks),
     sfx: overrides.sfx ?? new SilentSoundEffectService(),

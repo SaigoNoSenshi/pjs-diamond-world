@@ -2,7 +2,7 @@ import { act, fireEvent, waitFor } from '@testing-library/react-native';
 import { router } from 'expo-router';
 import { Text } from 'react-native';
 
-import { activities, findActivity } from '@/content/activities';
+import { allActivities, findActivity } from '@/content/activities';
 import { stickers } from '@/content/stickers';
 import { pickDailyQuest } from '@/domain/learning/dailyQuest';
 import { dateKeyFor } from '@/domain/learning/schema';
@@ -33,7 +33,7 @@ describe('Daily Quest, islands and stickers', () => {
       },
       { initialUrl: '/quest', services },
     );
-    const expected = pickDailyQuest(activities, dateKeyFor(new Date()), 'chd_default');
+    const expected = pickDailyQuest(allActivities(), dateKeyFor(new Date()), 'chd_default', 1);
     for (const id of expected) expect(await q.findByTestId(`quest-${id}`)).toBeTruthy();
     expect(q.getByTestId('quest-chest')).toBeTruthy();
     expect(q.getByTestId('diamond-counter')).toHaveTextContent('7');
@@ -47,7 +47,9 @@ describe('Daily Quest, islands and stickers', () => {
     expect(await q.findByTestId('island-activities')).toBeTruthy();
     expect(q.getByTestId('done-act_trace_a')).toBeTruthy();
     expect(q.queryByTestId('done-act_trace_b')).toBeNull();
-    const letters = activities.filter((a) => a.islandId === 'letters').length;
+    const letters = allActivities().filter(
+      (a) => a.islandId === 'letters' && a.grades.includes(1),
+    ).length;
     expect(q.getByTestId('island-progress')).toHaveTextContent(`1 of ${letters} done`);
     expect(findActivity('act_trace_b')).toBeDefined();
 

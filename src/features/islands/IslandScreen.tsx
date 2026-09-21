@@ -1,11 +1,10 @@
 import { useRouter } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from 'react-native';
 
 import { FriendlyError } from '@/components/FriendlyError';
 import { Icon, type IconName } from '@/components/icons/Icon';
 import { ScreenShell } from '@/components/ScreenShell';
-import { activitiesForIsland } from '@/content/activities';
 import { findIsland } from '@/content/islands';
 import { routes } from '@/constants/routes';
 import { strings } from '@/constants/strings';
@@ -14,6 +13,7 @@ import { DiamondCounter } from '@/features/learning/components/DiamondCounter';
 import { JellySays } from '@/features/learning/components/JellySays';
 import { useLearning } from '@/features/learning/LearningProvider';
 import { useAppServices } from '@/hooks/useAppServices';
+import { useActivities } from '@/hooks/useActivities';
 import { useSfx } from '@/hooks/useSfx';
 import { useVoice } from '@/hooks/useVoice';
 import { colors, palette, radii, shadows, spacing, typography } from '@/theme';
@@ -25,6 +25,9 @@ export function IslandScreen({ islandId }: { islandId: string }) {
   const { speak } = useVoice();
   const { analytics } = useAppServices();
   const learning = useLearning();
+  const all = useActivities();
+  const [gradeView, setGradeView] = useState<number | null>(null);
+  const grade = gradeView ?? learning.grade;
 
   useEffect(() => {
     if (!island) return;
@@ -39,8 +42,13 @@ export function IslandScreen({ islandId }: { islandId: string }) {
       </ScreenShell>
     );
   }
-  const list = activitiesForIsland(island.id);
+  const list = all.filter((a) => a.islandId === island.id && a.grades.includes(grade));
   const done = list.filter((a) => learning.isCompleted(a.id)).length;
+  const gradesHere = Array.from(
+    new Set(all.filter((a) => a.islandId === island.id).flatMap((a) => a.grades)),
+  )
+    .filter((g) => g <= learning.grade)
+    .sort();
 
   return (
     <ScreenShell
@@ -50,6 +58,25 @@ export function IslandScreen({ islandId }: { islandId: string }) {
     >
       <View style={styles.header}>
         <JellySays text={island.tagline} voice={island.voiceIntro} compact />
+        {gradesHere.length > 1 ? (
+          <View style={styles.grades} accessibilityRole="tablist" testID="grade-chips">
+            {gradesHere.map((g) => (
+              <Pressable
+                key={g}
+                accessibilityRole="tab"
+                accessibilityLabel={strings.learning.grade(g)}
+                accessibilityState={{ selected: g === grade }}
+                onPress={() => setGradeView(g)}
+                style={[styles.chip, g === grade && styles.chipSelected]}
+                testID={`grade-chip-${g}`}
+              >
+                <Text style={[styles.chipText, g === grade && styles.chipTextSelected]}>
+                  {strings.learning.grade(g)}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
+        ) : null}
         <Text style={styles.progress} accessibilityLiveRegion="polite" testID="island-progress">
           {done === list.length && list.length > 0
             ? strings.learning.allDone
@@ -120,6 +147,23 @@ function ActivityTile({
 
 const styles = StyleSheet.create({
   header: { paddingHorizontal: spacing.lg, gap: spacing.sm },
+  grades: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', gap: spacing.sm },
+  chip: {
+    minHeight: 44,
+    paddingHorizontal: spacing.md,
+    borderRadius: radii.pill,
+    backgroundColor: 'rgba(255,255,255,0.6)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  chipSelected: { backgroundColor: palette.ink },
+  chipText: {
+    fontFamily: typography.family,
+    fontSize: typography.size.body,
+    fontWeight: typography.weight.black,
+    color: palette.ink,
+  },
+  chipTextSelected: { color: palette.white },
   progress: {
     textAlign: 'center',
     fontFamily: typography.family,
