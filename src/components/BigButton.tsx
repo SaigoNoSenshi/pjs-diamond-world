@@ -96,7 +96,9 @@ export function BigButton({
         {showLabel ? (
           <Text
             style={[styles.label, size === 'hero' && styles.heroLabel]}
-            numberOfLines={2}
+            // Three lines so "My Diamond Book" never truncates: react-native-web ignores
+            // adjustsFontSizeToFit and would show "My Diamond ..".
+            numberOfLines={size === 'hero' ? 3 : 2}
             adjustsFontSizeToFit
             minimumFontScale={0.7}
           >
@@ -127,5 +129,5 @@ const styles = StyleSheet.create({
     color: palette.ink,
     textAlign: 'center',
   },
-  heroLabel: { fontSize: typography.size.title },
+  heroLabel: { fontSize: 24, lineHeight: 28 },
 });
