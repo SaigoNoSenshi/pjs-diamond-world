@@ -485,3 +485,46 @@ Tablet 1180×820, phone 390×844 and desktop 1440×900 all within the ranges abo
 **Expected and harmless:** GitHub Pages answers dynamic or unknown URLs (`/create/craft/…`, `/book/…`, typos) with HTTP 404 _and_ our `404.html`, which is the app shell — the app boots and routes correctly; the browser logs one "404" console line for the document. In-app navigation never reloads, so a child never hits it.
 
 **Not verified here, still true:** real iPad/Android tablet feel (use `?fps=1` on the device), iOS Safari specifics beyond the earlier WebKit-condition simulation, native builds.
+
+### Phase 17 — Plan 3 B1–B4: the learning-adventure platform (2026-09-21)
+
+JP's brief: "both creative, fun and would encourage my daughter to study and learn", Grade 1 (Philippines) level, "as if it's an endless list of functions and features". Delivered as **data-driven activity engines + a first content wave**, so new content is data, not code.
+
+**World and loop (B1)**
+
+- `HomeScreen` rewritten as the **Diamond Island map**: six learning islands (Letter Lagoon, Number Cove, Color & Art Bay, Science Shore, Story Reef, Craft Beach) as big tiles with a progress bar each; Daily Quest chest with `n/3` badge; My Garden, Music Reef, My Diamond Book and My Stickers; diamond counter; **day/night** tint and greeting from the real clock (`features/home/dayNight.ts`); **tap-reactive creatures** (fish, starfish, shell, crab, bird) that bounce, chime and say their name (`ReactiveDecor`).
+- `IslandScreen` — an island's activities as tiles with a done-check and "n of m done".
+- **Daily Quest** (`domain/learning/dailyQuest.ts`, `DailyQuestScreen`): three activities from three islands (always one creative), the same all day per device (seeded by date + child), never a streak; finishing all three opens the chest: +10 diamonds and a sticker the child does not have yet.
+- **Rewards** (`domain/learning/rewards.ts`): diamonds on every completion (full the first time, 1 on repeats — no grinding pressure), one sticker per activity on first completion, 36-sticker album (`StickerBookScreen`: owned in colour, the rest as quiet "?" shapes). Progress is additive only; nothing is ever taken away. Persisted in a new `learning` repository (memory / IndexedDB v2 / SQLite migration v2).
+- `LearningProvider` owns progress and also completes **Draw** and **Craft** activities when the drawing/craft is actually saved (event bus), so the existing creative screens count towards islands and quests.
+- Garden: `ACTIVITIES_AT_LEAST` unlock rule; learning tree (3 activities) and quest diamond (10).
+
+**Activity engines (B2 + B3)** — one generic `ActivityPlayerScreen` (`/play/[activityId]`) dispatches on `data.kind`; every engine reports a single completion with an optional 0..1 score; every activity has a **"Jelly reads it"** bubble (`JellySays`) and speaks its intro.
+
+| Engine        | What the child does                                                                       | Score                                 |
+| ------------- | ----------------------------------------------------------------------------------------- | ------------------------------------- |
+| TRACE         | Follow a dotted letter/number/shape from numbered start dots; strokes turn green          | coverage (`domain/activity/trace.ts`) |
+| QUIZ          | "Jelly asks": picture question, 2–4 big answer cards; wrong = gentle wobble, never red    | first-try ratio                       |
+| COUNTING      | count → tap the number; sort → tap item then basket; compare → tap the side with more     | first-try ratio                       |
+| MATCHING      | memory cards, flip two, pairs stay up                                                     | pairs / attempts                      |
+| PUZZLE        | jigsaw (tap two pieces to swap; 2×2 / 3×3 on our characters) and "what comes next?"       | swaps / first-try                     |
+| COLORING      | tap a colour, tap a region; save to My Diamond Book                                       | regions filled                        |
+| STICKER_SCENE | tap a sticker, tap the scene; undo; save to My Diamond Book                               | 1                                     |
+| STORY         | illustrated read-along, every word tappable, "Read to me", one gentle question at the end | question first-try                    |
+| MUSIC_MAKER   | rainbow xylophone / beach drums: tap pads, "Jelly plays", replay my tune                  | 1                                     |
+| DRAW / CRAFT  | existing engines, completed on real save                                                  | 1                                     |
+
+**Content wave (B4) — 79 activities, all original**
+
+- 42 tracing glyphs (A–Z, 0–9, six shapes) with phonics lines ("M is for mango!", "J is for jeepney!") — stroke data QA'd on a rendered contact sheet.
+- 8 "Jelly asks" quizzes (61 questions): letter sounds, find the letter, colours (with Filipino: pula, dilaw, asul, berde), shapes, numbers, animals (isda, pusa, aso, ibon), body & senses, living things & weather.
+- 5 counting games (to 10, to 20, sort by colour, sort by shape, more/less), 3 memory games, 3 puzzles, 6 coloring pages (fish, flower, butterfly, house, robot, Jelly), 2 sticker scenes, 3 read-along stories with 15 illustrations (Jelly's Lost Diamond, The Princess and the Rainbow Fish, PJ's Robot Pig Day), 2 instruments with 12 synthesised notes, 2 new crafts with 14 step illustrations (Paper Crown, Leaf Print) + the Clay Cup, 2 draw prompts.
+- 52 new data-driven icons (`components/icons/extraIcons.ts`, `iconSpec.ts`) rendered through the existing `Icon`; `scripts/icon-sheet.mjs` renders a QA sheet.
+
+**Gate:** prettier ✓, lint 0/0, tsc strict ✓, jest **41 suites / 139 tests** (new: rewards/quest, trace geometry, content validation for every pack, provider, quiz/counting/matching/trace/puzzle/story/music engines, home map, quest/island/sticker screens), export 20 routes / 21 chunks ✓, budget ✓ (entry 635 KB gzip — under the 650 KB ceiling; all-JS and assets ceilings raised to 1000 KB / 1600 KB for the per-screen lazy content).
+
+**Browser verification (Chromium, exported build):** 32-route smoke (every island, one of every engine, quest, stickers, unknown URL) 32/32, 0 errors. End-to-end flow: home → tap creature → Number Cove → play a quiz to the end → +4 diamonds + sticker → hard reload keeps diamonds and the done-check → quest lists 3 → sticker book 1 owned / 35 locked → trace L with touch → coloring page saved into the Book → xylophone tune replayed → story read and question answered — 12/12, 0 errors.
+
+**Bug found and fixed in the browser:** the tappable creatures sat under the home scroll layer on web (a scroll view swallows touches) — moved above it with a box-none wrapper and away from the tiles.
+
+**Deferred (honest):** A2 Skia canvas — drawing already measures 60 fps / 0 long frames in the harness, so the rewrite is not blocking; real-tablet feel still to be confirmed by JP. Voice remains device TTS; illustrations are AI-generated originals (good for PJ, not App-Store-polished).
